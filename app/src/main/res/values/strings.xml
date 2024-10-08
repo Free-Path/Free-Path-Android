@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">FreePath</string>
+    <string name="year_month">%d년 %d월</string>
+    <string name="month_day_str">%d월 %d일 (%s)</string>
+    <string name="hour_minute">%02d:%02d</string>
+    <string name="travel_start_day">가는 날</string>
+    <string name="travel_end_day">오는 날</string>
 </resources>
