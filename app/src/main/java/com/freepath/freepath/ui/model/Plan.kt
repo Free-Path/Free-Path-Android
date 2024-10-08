@@ -2,10 +2,13 @@ package com.freepath.freepath.ui.model
 
 import java.time.LocalDate
 
-data class Plan(
-    val startDate: LocalDate,
-    val planDetailsList: MutableList<List<PlanDetail>>,
-) {
-    val endDate
-        get() = startDate.plusDays(planDetailsList.sumOf(List<PlanDetail>::size).toLong())
+data class Plan(val planDates: List<PlanDate>) {
+    val dates = planDates.map(PlanDate::date)
 }
+
+val planEx = Plan(List(5) { day ->
+    PlanDate(
+        LocalDate.now().plusDays(1L + day),
+        List(3) { index -> planDetailEx.copy(id = day * 100 + index) }
+    )
+})

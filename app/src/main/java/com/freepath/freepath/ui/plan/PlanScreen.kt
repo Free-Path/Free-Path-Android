@@ -21,21 +21,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.freepath.freepath.ui.common.showToast
+import com.freepath.freepath.ui.model.Plan
 import com.freepath.freepath.ui.model.PlanDetail
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.Align
@@ -47,25 +46,22 @@ import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberMarkerState
 import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.launch
-import java.time.LocalDate
 
 @Composable
 fun PlanScreen(
     viewModel: PlanViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
-    val plan by viewModel.plan.collectAsState()
-    val planDetailsList = plan.planDetailsList.toMutableStateList()
+    val plan by viewModel.plan.collectAsStateWithLifecycle()
     val context = LocalContext.current
     PlanScreen(
-        plan.startDate,
-        planDetailsList,
+        plan,
         modifier,
         {
             context.showToast("PlanItem Clicked: ${it.title}")
         },
         {
-            context.showToast("PlanChange Clicked")
+            context.showToast("ChangePlan Clicked")
         }
     )
 }
@@ -73,13 +69,13 @@ fun PlanScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlanScreen(
-    startDate: LocalDate,
-    planDetailsList: List<List<PlanDetail>> = mutableStateListOf(),
+    plan: Plan,
     modifier: Modifier = Modifier,
     onClickPlanItem: (PlanDetail) -> Unit = {},
-    onClickPlanChange: () -> Unit = {},
+    onClickChangePlan: () -> Unit = {},
 ) {
 //    val screenHeight = LocalContext.current.resources.displayMetrics.heightPixels
+    val planDates = plan.planDates
     val context = LocalContext.current
     val sheetState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -96,9 +92,10 @@ private fun PlanScreen(
         scaffoldState = sheetState,
         sheetContent = {
             PlanColumn(
-                plansList = planDetailsList,
-                dates = List(planDetailsList.size) { startDate.plusDays(1L + it) },
+                planDates = planDates,
+                dates = plan.dates,
                 onClickPlanDetail = onClickPlanItem,
+                onClickChangePlan = onClickChangePlan,
                 modifier = Modifier
                     .fillMaxHeight(0.5f)
                     .fillMaxWidth()

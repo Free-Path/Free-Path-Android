@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.twotone.Place
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -53,7 +54,9 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
 import com.freepath.freepath.ui.common.TextShort
+import com.freepath.freepath.ui.model.PlanDate
 import com.freepath.freepath.ui.model.PlanDetail
+import com.freepath.freepath.ui.model.planDetailEx
 import com.freepath.freepath.ui.theme.FreePathTheme
 import com.freepath.freepath.ui.theme.Green60
 import com.freepath.freepath.ui.util.first
@@ -61,26 +64,26 @@ import com.freepath.freepath.ui.util.getName
 import com.freepath.freepath.ui.util.last
 import kotlinx.coroutines.launch
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @Composable
 fun PlanColumn(
-    plansList: List<List<PlanDetail>>,
+    planDates: List<PlanDate>,
     dates: List<LocalDate>,
     onClickPlanDetail: (PlanDetail) -> Unit,
+    onClickChangePlan: () -> Unit,
     modifier: Modifier = Modifier,
     isStartReached: (Boolean) -> Unit,
 ) {
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     val listState = rememberLazyListState()
     val coroutineScope = rememberCoroutineScope()
-    val sumCounts by remember(dates, plansList) {
+    val sumCounts by remember(dates, planDates) {
         derivedStateOf {
             buildList<Int>(dates.size) {
                 var sum = 0
-                plansList.forEach {
+                planDates.forEach {
                     add(sum)
-                    sum += it.size + 1
+                    sum += it.planDetails.size + 1
                 }
             }
         }
@@ -104,16 +107,29 @@ fun PlanColumn(
 
     Column(modifier = modifier) {
         HorizontalDivider()
-        DateTabRow(selectedTabIndex, dates) { rowIndex->
-            selectedTabIndex = rowIndex
-            coroutineScope.launch {
-                listState.animateScrollToItem(sumCounts[rowIndex.coerceIn(0 until sumCounts.last())])
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            DateTabRow(selectedTabIndex, dates, Modifier.weight(1f, true)) { rowIndex ->
+                selectedTabIndex = rowIndex
+                coroutineScope.launch {
+                    listState.animateScrollToItem(sumCounts[rowIndex.coerceIn(0 until sumCounts.last())])
+                }
+            }
+            Button(
+                onClick = onClickChangePlan,
+                modifier = Modifier
+                    .weight(0.3f, false)
+                    .padding(horizontal = 4.dp)
+            ) {
+                Text("편집")
             }
         }
         HorizontalDivider()
         PlanItems(
             onClickItem = onClickPlanDetail,
-            plansList = plansList,
+            planDates = planDates,
             listState = listState
         )
     }
@@ -128,9 +144,8 @@ fun DateTabRow(
 ) {
     ScrollableTabRow(
         edgePadding = 0.dp,
-        modifier = Modifier.absolutePadding(left = 0.dp),
+        modifier = modifier.absolutePadding(left = 0.dp),
         selectedTabIndex = selectedTabIndex,
-        divider = { VerticalDivider() },
     ) {
         dates.forEachIndexed { rowIndex, date ->
             DateTab(rowIndex, selectedTabIndex, date, onClickTab = onClickTab)
@@ -168,7 +183,7 @@ private fun DateTab(
 
 @Composable
 fun PlanItems(
-    plansList: List<List<PlanDetail>>,
+    planDates: List<PlanDate>,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState(),
     onClickItem: (PlanDetail) -> Unit,
@@ -177,16 +192,16 @@ fun PlanItems(
         modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
         state = listState,
     ) {
-        plansList.forEachIndexed { index, plans ->
+        planDates.forEachIndexed { index, plans ->
             item {
                 Column(Modifier.padding(vertical = 4.dp)) {
                     if (index != 0) {
                         HorizontalDivider()
                     }
-                    Text("${index + 1}일차", Modifier.padding(vertical = 8.dp),fontSize = 20.sp)
+                    Text("${index + 1}일차", Modifier.padding(vertical = 8.dp), fontSize = 20.sp)
                 }
             }
-            items(plans) { plan ->
+            items(plans.planDetails, key = PlanDetail::id) { plan ->
                 PlanItemDetail(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -284,12 +299,3 @@ private fun PreviewPlanDetail() {
         }
     }
 }
-
-val planDetailEx = PlanDetail(
-    thumbnail = "https://www.kh.or.kr/jnrepo/namo/img/images/000045/20230405103334542_MPZHA77B.jpg",
-    title = "경복궁",
-    likes = 1768,
-    category = "유적/문화재",
-    operating = LocalDateTime.of(2024, 10, 3, 10, 0)..LocalDateTime.of(2024, 10, 3, 20, 0),
-    price = null
-)
