@@ -8,7 +8,7 @@ import dagger.hilt.android.HiltAndroidApp
 class FreePathApplication:Application() {
     override fun onCreate() {
         super.onCreate()
-//        NaverMapSdk.getInstance(this).client =
-//            NaverMapSdk.NaverCloudPlatformClient("")
+        NaverMapSdk.getInstance(this).client =
+            NaverMapSdk.NaverCloudPlatformClient(BuildConfig.KEY_NAVER_SDK)
     }
 }

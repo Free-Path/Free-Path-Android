@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -23,6 +24,7 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+        buildConfigField("String", "KEY_NAVER_SDK", getApiKey("key.naver.sdk"))
     }
 
     buildTypes {
@@ -45,6 +47,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeCompiler {
         enableStrongSkippingMode = true
@@ -101,4 +104,8 @@ dependencies {
     implementation(libs.retrofit)
 
     // json
+}
+
+fun getApiKey(propertyKey: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(propertyKey)
 }
