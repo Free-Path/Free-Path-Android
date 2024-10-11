@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.plan
+package com.freepath.freepath.presentation.plan
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
@@ -53,15 +53,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
-import com.freepath.freepath.ui.common.TextShort
-import com.freepath.freepath.ui.model.PlanDate
-import com.freepath.freepath.ui.model.PlanDetail
-import com.freepath.freepath.ui.model.planDetailEx
+import com.freepath.freepath.presentation.common.TextShort
+import com.freepath.freepath.presentation.model.PlanDate
+import com.freepath.freepath.presentation.model.PlanDetail
+import com.freepath.freepath.presentation.model.planDetailEx
 import com.freepath.freepath.ui.theme.FreePathTheme
 import com.freepath.freepath.ui.theme.Green60
-import com.freepath.freepath.ui.util.first
-import com.freepath.freepath.ui.util.getName
-import com.freepath.freepath.ui.util.last
+import com.freepath.freepath.presentation.util.first
+import com.freepath.freepath.presentation.util.getName
+import com.freepath.freepath.presentation.util.last
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 

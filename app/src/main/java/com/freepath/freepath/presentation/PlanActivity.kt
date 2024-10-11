@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui
+package com.freepath.freepath.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
-import com.freepath.freepath.ui.plan.PlanScreen
+import com.freepath.freepath.presentation.plan.PlanScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
 import dagger.hilt.android.AndroidEntryPoint
 

@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.util
+package com.freepath.freepath.presentation.util
 
 import java.time.DayOfWeek
 import java.time.format.TextStyle

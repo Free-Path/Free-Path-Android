@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.common
+package com.freepath.freepath.presentation.common
 
 import android.content.Context
 import android.widget.Toast

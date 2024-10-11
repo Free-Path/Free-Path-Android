@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.common
+package com.freepath.freepath.presentation.common
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column

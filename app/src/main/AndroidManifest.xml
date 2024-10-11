@@ -14,7 +14,7 @@
         android:name=".FreePathApplication"
         tools:targetApi="31">
         <activity
-            android:name=".ui.PlanActivity"
+            android:name=".presentation.PlanActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.FreePath">

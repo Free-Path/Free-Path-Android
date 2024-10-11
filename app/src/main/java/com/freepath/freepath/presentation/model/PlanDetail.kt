@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.model
+package com.freepath.freepath.presentation.model
 
 import java.time.LocalDateTime
 

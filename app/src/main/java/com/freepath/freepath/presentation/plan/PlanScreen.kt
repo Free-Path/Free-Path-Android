@@ -1,4 +1,4 @@
-package com.freepath.freepath.ui.plan
+package com.freepath.freepath.presentation.plan
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
@@ -33,9 +33,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.freepath.freepath.ui.common.showToast
-import com.freepath.freepath.ui.model.Plan
-import com.freepath.freepath.ui.model.PlanDetail
+import com.freepath.freepath.presentation.common.showToast
+import com.freepath.freepath.presentation.model.Plan
+import com.freepath.freepath.presentation.model.PlanDetail
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.compose.Align
 import com.naver.maps.map.compose.ExperimentalNaverMapApi

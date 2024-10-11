@@ -1,7 +1,7 @@
-package com.freepath.freepath.ui.plan
+package com.freepath.freepath.presentation.plan
 
 import androidx.lifecycle.ViewModel
-import com.freepath.freepath.ui.model.planEx
+import com.freepath.freepath.presentation.model.planEx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
