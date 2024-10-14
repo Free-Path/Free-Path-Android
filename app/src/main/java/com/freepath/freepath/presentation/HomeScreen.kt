@@ -31,12 +31,13 @@ import com.freepath.freepath.ui.theme.TitleGray
 
 @Composable
 fun HomeScreen(isInProgressTravel: Boolean) {
-    val isInProgressTravel = remember { mutableStateOf(isInProgressTravel) }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
     ) {
+        val isInProgressTravel = remember { mutableStateOf(isInProgressTravel) }
+
         Column(
             modifier = Modifier.padding(10.dp),
             horizontalAlignment = Alignment.Start,
@@ -85,6 +86,8 @@ fun upComingTravel() {
             contentDescription = "images",
             alignment = Alignment.Center
         )
+
+
     }
 }
 
