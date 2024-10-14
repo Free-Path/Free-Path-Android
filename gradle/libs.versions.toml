@@ -15,8 +15,10 @@ lifecycleRuntimeKtx = "2.8.6"
 activityCompose = "1.9.2"
 materialIconsExtended = "1.7.3"
 naverMapCompose = "1.7.2"
+navigationCompose = "2.8.2"
 playServicesLocation = "21.3.0"
 retrofit = "2.11.0"
+navigation = "2.8.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -25,6 +27,7 @@ androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-com
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
+androidx-navigation-compose-v282 = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 calendar = { module = "com.kizitonwose.calendar:compose", version.ref = "compose" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
@@ -44,6 +47,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3",
 naver-map-compose = { module = "io.github.fornewid:naver-map-compose", version.ref = "naverMapCompose" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
