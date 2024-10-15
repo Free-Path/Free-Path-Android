@@ -85,7 +85,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     // navigation
-    implementation(libs.androidx.navigation)
     implementation(libs.androidx.navigation.compose.v282)
     implementation ("androidx.compose.material:material:1.4.2")
 
