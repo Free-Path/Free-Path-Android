@@ -1,5 +1,29 @@
 <resources>
     <string name="app_name">FreePath</string>
+    <string name="year_month">%d년 %d월</string>
+    <string name="month_day_str">%d월 %d일 (%s)</string>
+    <string name="hour_minute">%02d:%02d</string>
+    <string name="travel_start_day">가는 날</string>
+    <string name="travel_end_day">오는 날</string>
+    <string-array name="ages">
+        <item>9세 이하</item>
+        <item>10대</item>
+        <item>20대</item>
+        <item>30대</item>
+        <item>40대</item>
+        <item>50대</item>
+        <item>60대</item>
+        <item>70대 이상</item>
+    </string-array>
+    <string-array name="disabilities">
+        <item>휠체어가 필요해요.</item>
+        <item>엘리베이터가 필요해요.</item>
+        <item>보조 안내견 동반이 가능해야 해요.</item>
+        <item>수화 안내가 필요해요.</item>
+        <item>오디오 가이드가 필요해요.</item>
+        <item>점자 블록이 필요해요.</item>
+        <item>점자 홍보물이 필요해요.</item>
+    </string-array>
 
     <string name="bnv_home">홈</string>
     <string name="bnv_travel">여행</string>

@@ -1,4 +1,4 @@
-package com.freepath.freepath
+package com.freepath.freepath.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -27,9 +27,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.freepath.freepath.presentation.HomeScreen
-import com.freepath.freepath.presentation.TravelScreen
-import com.freepath.freepath.presentation.WelfareScreen
+import com.freepath.freepath.R
+import com.freepath.freepath.presentation.planchange.PlanChangeScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -91,7 +90,7 @@ fun BottomNavigation(navController: NavHostController) {
                 label = { Text(stringResource(id = item.navTitle), fontSize = 9.sp) },
                 selectedContentColor = Color.Blue,
                 unselectedContentColor = Color.DarkGray,
-                selected = currentRoute == item.screenRoute.toString(),
+                selected = currentRoute == item.screenRoute,
                 alwaysShowLabel = false,
                 onClick = {
                     navController.navigate(item.screenRoute) {
@@ -117,7 +116,7 @@ fun NavigationGraph(navController: NavHostController) {
             TravelScreen()
         }
         composable(BottomNavItem.Welfare.screenRoute) {
-            WelfareScreen()
+            PlanChangeScreen(onClickCancel = {}){}
         }
     }
 }
