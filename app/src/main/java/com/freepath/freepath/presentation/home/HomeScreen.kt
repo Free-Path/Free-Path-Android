@@ -1,7 +1,7 @@
-package com.freepath.freepath.presentation
+package com.freepath.freepath.presentation.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,24 +19,35 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import com.freepath.freepath.R
+import com.freepath.freepath.presentation.model.RecommendedTouristSpot
+import com.freepath.freepath.presentation.model.UpcomingTravel
 import com.freepath.freepath.ui.theme.FreePathTheme
+import com.freepath.freepath.ui.theme.Pretendard14
+import com.freepath.freepath.ui.theme.Pretendard16
+import com.freepath.freepath.ui.theme.Pretendard18
+import com.freepath.freepath.ui.theme.Pretendard24
 import com.freepath.freepath.ui.theme.TitleGray
 
 @Composable
 fun HomeScreen(isInProgressTravel: Boolean) {
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .verticalScroll(rememberScrollState())
+            .fillMaxSize(),
         color = Color.White
     ) {
         val isInProgressTravel = remember { mutableStateOf(isInProgressTravel) }
+        val homeViewModel = viewModel<HomeViewModel>()
 
         Column(
             modifier = Modifier.padding(10.dp),
@@ -49,75 +60,92 @@ fun HomeScreen(isInProgressTravel: Boolean) {
                 } else {
                     stringResource(R.string.home_upcoming_travel)
                 },
+                style = Pretendard24,
                 color = TitleGray,
-                fontSize = 24.sp,
                 modifier = Modifier
                     .padding(10.dp, 5.dp)
             )
 
-            upComingTravel()
+            upComingTravel(upcomingTravel = homeViewModel.mockUpcomingTravel)
+
             Spacer(
                 modifier = Modifier
                     .padding(10.dp)
             )
+
             Text(
                 text = stringResource(R.string.home_recommended_tourist_spot),
+                style = Pretendard24,
                 color = TitleGray,
-                fontSize = 24.sp,
                 modifier = Modifier
                     .padding(10.dp, 5.dp)
             )
 
-            recommendedTouristSpot()
+            recommendedTouristSpot(recommendTouristSpot = homeViewModel.mockRecommendedTouristSpot)
         }
     }
 }
 
 @Composable
-fun upComingTravel() {
+fun upComingTravel(upcomingTravel: UpcomingTravel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(5.dp),
         shape = RoundedCornerShape(15.dp)
     ) {
-        Image(
-            painterResource(id = R.drawable.ic_launcher_background),
-            contentDescription = "images",
-            alignment = Alignment.Center
-        )
-
-
+        Box(
+            modifier = Modifier
+                .fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            AsyncImage(
+                model = upcomingTravel.upcomingTravelImg,
+                contentDescription = null,
+                alignment = Alignment.Center,
+                contentScale = ContentScale.FillWidth,
+                alpha = 0.5f
+            )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = upcomingTravel.upcomingTravelTitle,
+                    style = Pretendard18
+                )
+                Text(
+                    text = upcomingTravel.upcomingTravelPeriod,
+                    style = Pretendard16
+                )
+                upcomingTravel.upcomingTravelRoute.forEach { route ->
+                    Text(
+                        text = route,
+                        style = Pretendard14
+                    )
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun recommendedTouristSpot() {
-    // TODO image 서버에서 coil로 받아서 출력
-    val images = listOf(
-        R.drawable.ic_launcher_background,
-        com.naver.maps.map.R.drawable.navermap_default_cluster_icon_low_density,
-        R.drawable.ic_bnv_welfare_32,
-        R.drawable.ic_launcher_foreground,
-        com.naver.maps.map.R.drawable.navermap_default_marker_icon_lightblue,
-        R.drawable.ic_bnv_home_32,
-        com.naver.maps.map.R.drawable.navermap_default_ground_overlay_image
-    )
-
+fun recommendedTouristSpot(recommendTouristSpot: List<RecommendedTouristSpot>) {
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
-                .verticalScroll(rememberScrollState())
                 .padding(5.dp)
         ) {
             customStaggeredVerticalGrid(
                 numColumns = 2,
                 modifier = Modifier.padding(5.dp)
             ) {
-                images.forEach { img ->
+                recommendTouristSpot.forEach { recommendTouristSpot ->
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -126,14 +154,19 @@ fun recommendedTouristSpot() {
                     ) {
                         Column(
                             modifier = Modifier
-                                .fillMaxSize()
                                 .align(Alignment.CenterHorizontally),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Image(
-                                painterResource(id = img),
-                                contentDescription = "images",
-                                alignment = Alignment.Center
+                            AsyncImage(
+                                model = recommendTouristSpot.imageUrl,
+                                contentDescription = null,
+                                alignment = Alignment.Center,
+                            )
+
+                            Text(
+                                text = recommendTouristSpot.placeName,
+                                style = Pretendard16,
+                                modifier = Modifier.padding(vertical = 10.dp)
                             )
                         }
                     }
@@ -200,7 +233,6 @@ private fun testColumn(columnHeights: IntArray): Int {
 
     return columnIndex
 }
-
 
 @Preview(showBackground = true)
 @Composable
