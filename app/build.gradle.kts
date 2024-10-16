@@ -65,7 +65,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(libs.androidx.ui.test.junit4)
+    // androidTestImplementation(libs.androidx.ui.test.junit4)
 
     // android ktx
     implementation(libs.androidx.core.ktx)
@@ -86,7 +86,6 @@ dependencies {
 
     // navigation
     implementation(libs.androidx.navigation)
-    implementation(libs.androidx.navigation.compose.v282)
     implementation(libs.androidx.material)
 
     // map
