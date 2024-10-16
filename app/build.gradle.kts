@@ -79,6 +79,11 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // navigation
+    implementation(libs.androidx.navigation)
+    implementation(libs.androidx.navigation.compose.v282)
+    implementation(libs.androidx.material)
+
     // map
     implementation(libs.naver.map.compose)
     implementation(libs.play.services.location)
