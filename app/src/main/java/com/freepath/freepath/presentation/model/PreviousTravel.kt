@@ -1,7 +1,7 @@
 package com.freepath.freepath.presentation.model
 
 data class PreviousTravel(
-    val upcomingTravelImg: String,
-    val upcomingTravelName: String,
-    val upcomingTravelPeriod: String
+    val previousTravelImg: String,
+    val previousTravelName: String,
+    val previousTravelPeriod: String
 )
