@@ -2,8 +2,12 @@ package com.freepath.freepath.presentation.recommend
 
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -22,6 +26,9 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     private val _targetCheckList = mutableStateListOf(*Array(10) { false })
     val targetCheckList: List<Boolean> = _targetCheckList
+
+    var isCreationComplete = mutableStateOf(false)
+        private set
 
     fun plusPeopleCount() {
         if (peopleCount.intValue < 20) {
@@ -50,5 +57,13 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     fun changeTargetChecked(index: Int) {
         _targetCheckList[index] = targetCheckList[index].not()
+    }
+
+    fun getRecommendPlan() {
+        println("getRecommendPlan")
+        viewModelScope.launch {
+            delay(3_000L)
+            isCreationComplete.value = true
+        }
     }
 }
