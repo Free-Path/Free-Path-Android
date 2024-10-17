@@ -24,12 +24,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.model.RecommendedTouristSpot
-import com.freepath.freepath.presentation.model.UpcomingTravel
+import com.freepath.freepath.presentation.model.CurrentTravel
 import com.freepath.freepath.ui.theme.FreePathTheme
 import com.freepath.freepath.ui.theme.Pretendard14
 import com.freepath.freepath.ui.theme.Pretendard16
@@ -66,7 +65,7 @@ fun HomeScreen(isInProgressTravel: Boolean) {
                     .padding(10.dp, 5.dp)
             )
 
-            upComingTravel(upcomingTravel = homeViewModel.mockUpcomingTravel)
+            upComingTravel(currentTravel = homeViewModel.mockCurrentTravel)
 
             Spacer(
                 modifier = Modifier
@@ -87,7 +86,7 @@ fun HomeScreen(isInProgressTravel: Boolean) {
 }
 
 @Composable
-fun upComingTravel(upcomingTravel: UpcomingTravel) {
+fun upComingTravel(currentTravel: CurrentTravel) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -100,7 +99,7 @@ fun upComingTravel(upcomingTravel: UpcomingTravel) {
             contentAlignment = Alignment.Center
         ) {
             AsyncImage(
-                model = upcomingTravel.upcomingTravelImg,
+                model = currentTravel.currentTravelImg,
                 contentDescription = null,
                 alignment = Alignment.Center,
                 contentScale = ContentScale.FillWidth,
@@ -113,14 +112,14 @@ fun upComingTravel(upcomingTravel: UpcomingTravel) {
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = upcomingTravel.upcomingTravelTitle,
+                    text = currentTravel.currentTravelTitle,
                     style = Pretendard18
                 )
                 Text(
-                    text = upcomingTravel.upcomingTravelPeriod,
+                    text = currentTravel.currentTravelPeriod,
                     style = Pretendard16
                 )
-                upcomingTravel.upcomingTravelRoute.forEach { route ->
+                currentTravel.currentTravelRoute.forEach { route ->
                     Text(
                         text = route,
                         style = Pretendard14
