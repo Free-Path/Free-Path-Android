@@ -28,7 +28,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.R
+import com.freepath.freepath.presentation.home.HomeScreen
 import com.freepath.freepath.presentation.planchange.PlanChangeScreen
+import com.freepath.freepath.presentation.travel.TravelScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
 import dagger.hilt.android.AndroidEntryPoint
 
