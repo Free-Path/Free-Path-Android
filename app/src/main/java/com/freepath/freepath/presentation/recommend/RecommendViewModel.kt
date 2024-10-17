@@ -27,6 +27,9 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
     private val _targetCheckList = mutableStateListOf(*Array(10) { false })
     val targetCheckList: List<Boolean> = _targetCheckList
 
+    private val _styleCheckList = mutableStateListOf(*Array(10) { false })
+    val styleCheckList: List<Boolean> = _styleCheckList
+
     var isCreationComplete = mutableStateOf(false)
         private set
 
@@ -57,6 +60,10 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     fun changeTargetChecked(index: Int) {
         _targetCheckList[index] = targetCheckList[index].not()
+    }
+
+    fun changeStyleChecked(index: Int) {
+        _styleCheckList[index] = styleCheckList[index].not()
     }
 
     fun getRecommendPlan() {
