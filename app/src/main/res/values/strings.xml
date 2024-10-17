@@ -24,6 +24,18 @@
         <item>점자 블록이 필요해요.</item>
         <item>점자 홍보물이 필요해요.</item>
     </string-array>
+    <string-array name="targets">
+        <item>일상적인 환경 및 역할에서의 탈출, 지루함 탈피</item>
+        <item>쉴 수 있는 기회, 육체 피로 해결 및 정신적인 휴식</item>
+        <item>여행 동반자와의 친밀감 및 유대감 증진</item>
+        <item>진정한 자아 찾기 또는 자신을 되돌아볼 기회 찾기</item>
+        <item>SNS 사진 등록 등 과시</item>
+        <item>운동, 건강 증진 및 충전</item>
+        <item>새로운 경험 추구</item>
+        <item>역사 탐방, 문화적 경험 등 교육적 동기</item>
+        <item>특별한 목적(칠순여행, 신혼여행, 수학여행, 인센티브여행)</item>
+        <item>기타</item>
+    </string-array>
 
     <string name="bnv_home">홈</string>
     <string name="bnv_travel">여행</string>
