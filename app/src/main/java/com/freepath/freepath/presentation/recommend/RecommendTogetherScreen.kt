@@ -1,15 +1,8 @@
 package com.freepath.freepath.presentation.recommend
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -68,44 +61,24 @@ fun RecommendTogetherScreen(
     val buttonHeight = remember(configuration.screenHeightDp) {
         (configuration.screenHeightDp / 10).coerceIn(40..60).dp
     }
-    val scrollState = rememberScrollState()
-    Column(
-        modifier
-            .padding(8.dp)
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column {
-            Text("누구와 여행하시나요?", fontSize = 24.sp)
-            Spacer(Modifier.height(8.dp))
-            Text("연령")
-            FilterChipGroup(
-                chipStateList,
-                buttonHeight = buttonHeight,
-                onClickChip = onClickChip,
-                columnSize = 3
-            )
-            Spacer(Modifier.height(16.dp))
-            Text("총 인원 수")
-            NumberPlusMinusButton(
-                peopleCount,
-                Modifier.align(Alignment.CenterHorizontally),
-                onClickPlus = onClickPlusButton,
-                onClickMinus = onClickMinusButton
-            )
-        }
-
-        Spacer(Modifier.height(28.dp))
-        Button(
-            onClick = onClickNext,
-            Modifier
-                .fillMaxWidth(0.5f)
-                .padding(vertical = 8.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text("다음", Modifier.padding(vertical = 8.dp))
-        }
+    RecommendFrame(onClickNext = onClickNext, modifier = modifier) {
+        Text("누구와 여행하시나요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+        Spacer(Modifier.height(8.dp))
+        Text("같이 여행하는 인원의 연령대를 모두 골라주세요")
+        FilterChipGroup(
+            chipStateList,
+            buttonHeight = buttonHeight,
+            onClickChip = onClickChip,
+            columnSize = 3
+        )
+        Spacer(Modifier.height(16.dp))
+        Text("같이 여행하는 인원은 총 몇 명인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+        NumberPlusMinusButton(
+            peopleCount,
+            Modifier.align(Alignment.CenterHorizontally),
+            onClickPlus = onClickPlusButton,
+            onClickMinus = onClickMinusButton
+        )
     }
 }
 

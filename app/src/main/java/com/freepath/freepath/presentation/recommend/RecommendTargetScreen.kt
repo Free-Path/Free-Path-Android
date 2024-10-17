@@ -4,20 +4,15 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,8 +24,8 @@ import com.freepath.freepath.presentation.common.CheckBoxGroup
 @Composable
 fun RecommendTargetScreen(
     modifier: Modifier = Modifier,
-    onClickNext: () -> Unit = {},
     viewModel: RecommendViewModel = hiltViewModel(),
+    onClickNext: () -> Unit = {},
 ) {
     val environmentValue by remember { viewModel.environmentValue }
     val checkedList = remember { viewModel.targetCheckList }
@@ -55,40 +50,20 @@ private fun RecommendTargetScreen(
     onValueChange: (Float) -> Unit,
 ) {
     val targetTextArray = stringArrayResource(R.array.targets)
-    val scrollState = rememberScrollState()
-    Column(
-        modifier
-            .padding(8.dp)
-            .fillMaxSize()
-            .verticalScroll(scrollState),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        Column {
-            Text("여행의 목적이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-            Spacer(Modifier.height(8.dp))
-            CheckBoxGroup(checkedList, onClickCheck, targetTextArray)
+    RecommendFrame(onClickNext = onClickNext, modifier = modifier) {
+        Text("여행의 목적이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+        Spacer(Modifier.height(8.dp))
+        CheckBoxGroup(checkedList, onClickCheck, targetTextArray)
 
-            Spacer(Modifier.height(32.dp))
+        Spacer(Modifier.height(32.dp))
 
-            Text("선호하는 환경이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-            Spacer(Modifier.height(8.dp))
-            EnvironmentSliderBar(
-                environmentValue,
-                Modifier.padding(horizontal = 4.dp),
-                onValueChange
-            )
-        }
-
-        Spacer(Modifier.height(24.dp))
-        Button(
-            onClick = onClickNext,
-            Modifier
-                .fillMaxWidth(0.5f)
-                .padding(vertical = 8.dp)
-                .align(Alignment.CenterHorizontally)
-        ) {
-            Text("다음", Modifier.padding(vertical = 8.dp))
-        }
+        Text("선호하는 환경이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+        Spacer(Modifier.height(8.dp))
+        EnvironmentSliderBar(
+            environmentValue,
+            Modifier.padding(horizontal = 4.dp),
+            onValueChange
+        )
     }
 }
 
