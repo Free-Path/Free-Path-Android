@@ -1,11 +1,12 @@
 package com.freepath.freepath.presentation.recommend
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -30,7 +31,7 @@ import com.freepath.freepath.presentation.common.NumberPlusMinusButton
 fun RecommendTogetherScreen(
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
-    onClickNext: () -> Unit,
+    onClickNext: () -> Unit = {},
 ) {
     val ageStringArray = stringArrayResource(R.array.ages)
     val count by remember { viewModel.peopleCount }
@@ -41,7 +42,6 @@ fun RecommendTogetherScreen(
             }
         }
     }
-    println(chipStateList)
 
     RecommendTogetherScreen(
         count,
@@ -69,13 +69,14 @@ fun RecommendTogetherScreen(
         (configuration.screenHeightDp / 10).coerceIn(40..60).dp
     }
     val scrollState = rememberScrollState()
-    Column(modifier) {
-        Column(
-            Modifier
-                .padding(vertical = 4.dp, horizontal = 8.dp)
-                .verticalScroll(scrollState)
-                .weight(1f)
-        ) {
+    Column(
+        modifier
+            .padding(8.dp)
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        Column {
             Text("누구와 여행하시나요?", fontSize = 24.sp)
             Spacer(Modifier.height(8.dp))
             Text("연령")
@@ -93,15 +94,15 @@ fun RecommendTogetherScreen(
                 onClickPlus = onClickPlusButton,
                 onClickMinus = onClickMinusButton
             )
-            Spacer(Modifier.height(28.dp))
         }
+
+        Spacer(Modifier.height(28.dp))
         Button(
             onClick = onClickNext,
             Modifier
-                .weight(0.3f)
                 .fillMaxWidth(0.5f)
+                .padding(vertical = 8.dp)
                 .align(Alignment.CenterHorizontally)
-                .wrapContentHeight()
         ) {
             Text("다음", Modifier.padding(vertical = 8.dp))
         }
