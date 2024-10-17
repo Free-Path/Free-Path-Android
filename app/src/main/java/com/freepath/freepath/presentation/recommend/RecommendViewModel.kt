@@ -17,6 +17,12 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
     private val _ageStateList = mutableStateListOf(*Array(9) { false })
     val ageStateList: List<Boolean> = _ageStateList
 
+    var environmentValue = mutableIntStateOf(4)
+        private set
+
+    private val _targetCheckList = mutableStateListOf(*Array(10) { false })
+    val targetCheckList: List<Boolean> = _targetCheckList
+
     fun plusPeopleCount() {
         if (peopleCount.intValue < 20) {
             peopleCount.intValue++
@@ -30,12 +36,19 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
     }
 
     fun changeAgeStateChecked(index: Int) {
-//        _ageStateList[index] = ageStateList[index].copy(selected = ageStateList[index].selected.not())
         _ageStateList[index] = ageStateList[index].not()
         println(_ageStateList)
     }
 
     fun changeDisabilityChecked(index: Int) {
         _disabilityCheckList[index] = disabilityCheckList[index].not()
+    }
+
+    fun changeEnvironmentValue(value: Int) {
+        environmentValue.intValue = value
+    }
+
+    fun changeTargetChecked(index: Int) {
+        _targetCheckList[index] = targetCheckList[index].not()
     }
 }
