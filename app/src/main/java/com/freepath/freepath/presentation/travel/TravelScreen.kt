@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,67 +40,85 @@ import com.freepath.freepath.ui.theme.TitleGray
 
 @Composable
 fun TravelScreen() {
-    Surface(
+    Box(
         modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize(),
-        color = Color.White
+            .fillMaxSize()
     ) {
-        val travelViewModel = viewModel<TravelViewModel>()
-
-        Column(
+        Surface(
             modifier = Modifier
-                .padding(10.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.SpaceBetween
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize(),
+            color = Color.White
         ) {
-            if (travelViewModel.isCurrentTravel.value) {
+            val travelViewModel = viewModel<TravelViewModel>()
+
+            Column(
+                modifier = Modifier
+                    .padding(10.dp),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                if (travelViewModel.isCurrentTravel.value) {
+                    Text(
+                        text = stringResource(R.string.travel_current_travel),
+                        style = Pretendard24,
+                        color = TitleGray,
+                        modifier = Modifier
+                            .padding(10.dp, 5.dp)
+                    )
+
+                    CurrentTravelCard(travelViewModel.mockCurrentTravel)
+                }
+
+                Spacer(
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
+
                 Text(
-                    text = stringResource(R.string.travel_current_travel),
+                    text = stringResource(R.string.travel_upcoming_travel),
                     style = Pretendard24,
                     color = TitleGray,
                     modifier = Modifier
                         .padding(10.dp, 5.dp)
                 )
 
-                CurrentTravelCard(travelViewModel.mockCurrentTravel)
-            }
+                travelViewModel.mockUpcomingTravel.forEach { upcomingTravel ->
+                    UpcomingTravelList(upcomingTravel = upcomingTravel)
+                }
 
-            Spacer(
-                modifier = Modifier
-                    .padding(10.dp)
-            )
+                Spacer(
+                    modifier = Modifier
+                        .padding(10.dp)
+                )
 
-            Text(
-                text = stringResource(R.string.travel_upcoming_travel),
-                style = Pretendard24,
-                color = TitleGray,
-                modifier = Modifier
-                    .padding(10.dp, 5.dp)
-            )
+                Text(
+                    text = stringResource(R.string.travel_previous_travel),
+                    style = Pretendard24,
+                    color = TitleGray,
+                    modifier = Modifier
+                        .padding(10.dp, 5.dp)
+                )
 
-            travelViewModel.mockUpcomingTravel.forEach { upcomingTravel ->
-                UpcomingTravelList(upcomingTravel = upcomingTravel)
-            }
-
-            Spacer(
-                modifier = Modifier
-                    .padding(10.dp)
-            )
-
-            Text(
-                text = stringResource(R.string.travel_previous_travel),
-                style = Pretendard24,
-                color = TitleGray,
-                modifier = Modifier
-                    .padding(10.dp, 5.dp)
-            )
-
-            travelViewModel.mockPreviousTravel.forEach { previousTravel ->
-                PreviousTravelList(previousTravel = previousTravel)
+                travelViewModel.mockPreviousTravel.forEach { previousTravel ->
+                    PreviousTravelList(previousTravel = previousTravel)
+                }
             }
         }
+
+        FloatingActionButton(
+            onClick = { },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = null
+            )
+        }
     }
+
 }
 
 @Composable
