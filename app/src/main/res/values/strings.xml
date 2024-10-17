@@ -25,6 +25,7 @@
         <item>점자 홍보물이 필요해요.</item>
     </string-array>
 
+    <!-- bottom navigation -->
     <string name="bnv_home">홈</string>
     <string name="bnv_travel">여행</string>
     <string name="bnv_welfare">복지</string>
@@ -33,4 +34,9 @@
     <string name="home_upcoming_travel">여행이 다가오고 있어요!</string>
     <string name="home_current_travel">진행 중인 여행</string>
     <string name="home_recommended_tourist_spot">오늘의 추천 여행지</string>
+
+    <!-- travel -->
+    <string name="travel_upcoming_travel">다가오는 여행 ></string>
+    <string name="travel_previous_travel">지난 여행 ></string>
+    <string name="travel_current_travel">진행 중인 여행</string>
 </resources>

@@ -1,8 +1,8 @@
 package com.freepath.freepath.presentation.model
 
-data class UpcomingTravel (
+data class UpcomingTravel(
     val upcomingTravelImg: String,
-    val upcomingTravelTitle: String,
-    val upcomingTravelPeriod: String,
-    val upcomingTravelRoute: List<String>
+    val upcomingTravelDday: String,
+    val upcomingTravelName: String,
+    val upcomingTravelPeriod: String
 )
