@@ -2,14 +2,14 @@ package com.freepath.freepath.presentation.home
 
 import androidx.lifecycle.ViewModel
 import com.freepath.freepath.presentation.model.RecommendedTouristSpot
-import com.freepath.freepath.presentation.model.UpcomingTravel
+import com.freepath.freepath.presentation.model.CurrentTravel
 
 class HomeViewModel : ViewModel() {
-    val mockUpcomingTravel = UpcomingTravel(
-        upcomingTravelImg = "https://san.chosun.com/news/photo/201911/13272_55951_153.jpg",
-        upcomingTravelTitle = "제주도",
-        upcomingTravelPeriod = "2024.12.05~2024.12.09 (3박 4일)",
-        upcomingTravelRoute = listOf(
+    val mockCurrentTravel = CurrentTravel(
+        currentTravelImg = "https://san.chosun.com/news/photo/201911/13272_55951_153.jpg",
+        currentTravelTitle = "제주도",
+        currentTravelPeriod = "2024.12.05~2024.12.09 (3박 4일)",
+        currentTravelRoute = listOf(
             "· 1일차: 섭지코지, 성산일출봉",
             "· 2일차: 만장굴, 성읍민속마을",
             "· 3일차: 우도, 추자도, 국립제주박물관",
