@@ -20,7 +20,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,12 +39,14 @@ import com.freepath.freepath.ui.theme.Pretendard16
 import com.freepath.freepath.ui.theme.Pretendard20
 import com.freepath.freepath.ui.theme.Pretendard24
 import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.CameraPosition
 import com.naver.maps.map.compose.Align
 import com.naver.maps.map.compose.ExperimentalNaverMapApi
 import com.naver.maps.map.compose.MapUiSettings
 import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerDefaults
 import com.naver.maps.map.compose.NaverMap
+import com.naver.maps.map.compose.rememberCameraPositionState
 import com.naver.maps.map.compose.rememberMarkerState
 
 class TouristSpotDetailActivity : ComponentActivity() {
@@ -177,7 +178,7 @@ fun TouristSpotRecommendList(
     modifier: Modifier = Modifier,
     touristSpotDetailRecommendList: List<String>
 ) {
-    Row {
+    Row(modifier) {
         touristSpotDetailRecommendList.forEach { recommend ->
             RecommendTag(
                 text = recommend,
@@ -190,22 +191,25 @@ fun TouristSpotRecommendList(
 @OptIn(ExperimentalNaverMapApi::class)
 @Composable
 fun TouristSpotDetailMap(placeName: String, lat: Double, lng: Double) {
-    val positions = remember { listOf(LatLng(lat, lng)) }
-
+    val position = LatLng(lat, lng)
+    val cameraPositionState = rememberCameraPositionState{
+        this.position = CameraPosition(position, 15.0)
+    }
     NaverMap(
         modifier = Modifier.fillMaxWidth(),
         onMapClick = { _, _ -> { } },
         content = {
             Marker(
                 state = rememberMarkerState(
-                    position = positions[0]
+                    position = position
                 ),
                 captionText = placeName,
                 icon = MarkerDefaults.Icon,
                 captionAligns = arrayOf(Align.Top, Align.Right)
             )
         },
-        uiSettings = MapUiSettings(isZoomControlEnabled = false)
+        uiSettings = MapUiSettings(isZoomControlEnabled = false),
+        cameraPositionState = cameraPositionState
     )
 }
 

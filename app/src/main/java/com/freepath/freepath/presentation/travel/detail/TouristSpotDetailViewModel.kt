@@ -15,8 +15,8 @@ class TouristSpotDetailViewModel : ViewModel() {
         placeDescription = "조선시대의 궁궐 중 하나이자 조선의 정궁(법궁)이다. 태조가 조선을 건국하고 한양 천도를 단행하면서 조선 시대에 가장 먼저 지은 궁궐로, 1592년 임진왜란 때 소실되어 275년간 방치되다가 19세기에 흥선대원군 주도로 중건되었다",
         placeBusinessHour = "09:00 ~ 17:30",
         placeAddress = "서울특별시 종로구 사직로 161(세종로)",
-        placeLatitude = 37.57207,
-        placeLongitude = 126.97917,
+        placeLatitude = 37.5808473,
+        placeLongitude = 126.9768515,
         placeBarrierFree = listOf(
             "휠체어 충전소 : 북문에서 50m 거리",
             "엘리베이터 : 동2문에서 우측으로 도보 1분 거리",
