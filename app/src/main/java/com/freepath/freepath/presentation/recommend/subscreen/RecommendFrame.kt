@@ -1,4 +1,4 @@
-package com.freepath.freepath.presentation.recommend
+package com.freepath.freepath.presentation.recommend.subscreen
 
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.layout.Arrangement

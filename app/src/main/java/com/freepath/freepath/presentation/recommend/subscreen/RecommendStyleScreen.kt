@@ -1,4 +1,4 @@
-package com.freepath.freepath.presentation.recommend
+package com.freepath.freepath.presentation.recommend.subscreen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.common.CheckBoxGroup
+import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendStyleScreen(
@@ -39,7 +40,7 @@ private fun RecommendStyleScreen(
     val styles = stringArrayResource(R.array.styles)
     RecommendFrame(onClickNext, modifier) {
         Column {
-            Text("이런 도움이 필요해요.", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+            Text("방문하고 싶은\n여행지 스타일을 알려주세요!", fontSize = MaterialTheme.typography.titleLarge.fontSize)
             Spacer(Modifier.height(8.dp))
             CheckBoxGroup(checkedList, onClickCheck, styles)
         }

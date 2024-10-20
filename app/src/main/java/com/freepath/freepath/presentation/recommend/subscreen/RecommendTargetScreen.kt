@@ -1,4 +1,4 @@
-package com.freepath.freepath.presentation.recommend
+package com.freepath.freepath.presentation.recommend.subscreen
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.common.CheckBoxGroup
+import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendTargetScreen(

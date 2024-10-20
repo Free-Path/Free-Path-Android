@@ -1,4 +1,4 @@
-package com.freepath.freepath.presentation.recommend
+package com.freepath.freepath.presentation.recommend.subscreen
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.common.FilterChipGroup
 import com.freepath.freepath.presentation.common.FilterChipState
 import com.freepath.freepath.presentation.common.NumberPlusMinusButton
+import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendTogetherScreen(
