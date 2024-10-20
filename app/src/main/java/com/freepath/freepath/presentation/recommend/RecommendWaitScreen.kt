@@ -38,7 +38,7 @@ import com.freepath.freepath.presentation.common.icon.Robot
 fun RecommendWaitScreen(
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
-    onClickNext: () -> Unit = {},
+    goPlanScreen: (Int?) -> Unit = {},
 ) {
     var isFirstEntry by rememberSaveable { mutableStateOf(true) }
 
@@ -49,16 +49,15 @@ fun RecommendWaitScreen(
         }
     }
     val isCreationComplete by remember { viewModel.isCreationComplete }
-    RecommendWaitScreen(isCreationComplete, modifier, onClickNext)
+    RecommendWaitScreen(isCreationComplete, modifier, goPlanScreen)
 }
 
 @Composable
 fun RecommendWaitScreen(
     isCreationComplete: Boolean,
     modifier: Modifier = Modifier,
-    onClickNext: () -> Unit,
+    goPlanScreen: (Int?) -> Unit,
 ) {
-
     val transition = updateTransition(isCreationComplete, label = "selected state")
     transition.AnimatedContent { creationState ->
         if (creationState) {
@@ -72,7 +71,7 @@ fun RecommendWaitScreen(
                     modifier = Modifier
                         .clip(ShapeDefaults.ExtraLarge)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .clickable { onClickNext() }
+                        .clickable { goPlanScreen(null) }
                         .padding(12.dp)
                         .size(40.dp)
                 )

@@ -24,7 +24,7 @@ fun RecommendNav(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     recommendViewModel: RecommendViewModel = hiltViewModel(),
-    finishNav: () -> Unit = {},
+    finishNav: (Int?) -> Unit = {},
 ) {
     val context = LocalContext.current
     NavHost(
@@ -32,10 +32,9 @@ fun RecommendNav(
         startDestination = RecommendNavItem.Calendar,
         modifier = modifier
     ) {
-        println(navController.currentBackStackEntry?.destination?.route)
         composable<RecommendNavItem.Calendar> {
             RecommendCalendarScreen(
-                onClickBack = { finishNav() },
+                onClickBack = { finishNav(null) },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Together) }
             )
@@ -75,7 +74,11 @@ fun RecommendNav(
         }
         composable<RecommendNavItem.Style> {
             RecommendStyleScreen(
-                onClickBack = { navController.popBackStack() },
+                onClickBack = {
+                    navController.navigate(RecommendNavItem.Target) {
+                        popUpTo(RecommendNavItem.Target)
+                    }
+                },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Wait) }
             )
