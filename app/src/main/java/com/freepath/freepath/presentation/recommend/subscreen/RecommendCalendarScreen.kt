@@ -57,21 +57,28 @@ import java.util.Locale
 
 @Composable
 fun RecommendCalendarScreen(
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
 ) {
     RecommendCalendarScreen(
-        onClickNext = onClickNext
+        onClickNext = onClickNext,
+        onClickBack = onClickBack,
+        modifier = modifier
     )
 }
 
 @Composable
 fun RecommendCalendarScreen(
-    modifier: Modifier = Modifier,
+    onClickBack: () -> Unit,
     onClickNext: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    RecommendFrame(onClickNext = onClickNext) {
+    RecommendFrame(
+        onClickBack = onClickBack,
+        onClickNext = onClickNext
+    ) {
         CalendarLibrary(modifier)
     }
 }

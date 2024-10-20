@@ -19,13 +19,15 @@ import com.freepath.freepath.presentation.recommend.RecommendViewModel
 fun RecommendDisabilityScreen(
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
+    onClickBack: () -> Unit,
     onClickNext: () -> Unit = {},
 ) {
     val checkedList = remember { viewModel.disabilityCheckList }
     RecommendDisabilityScreen(
         checkedList,
-        modifier,
         onClickNext,
+        onClickBack,
+        modifier,
         viewModel::changeDisabilityChecked
     )
 }
@@ -33,12 +35,13 @@ fun RecommendDisabilityScreen(
 @Composable
 fun RecommendDisabilityScreen(
     checkedList: List<Boolean>,
-    modifier: Modifier = Modifier,
     onClickNext: () -> Unit,
+    onClickBack: () -> Unit,
+    modifier: Modifier = Modifier,
     onClickCheck: (Int) -> Unit,
 ) {
     val disabilities = stringArrayResource(R.array.disabilities)
-    RecommendFrame(onClickNext, modifier) {
+    RecommendFrame(onClickNext, onClickBack = onClickBack, modifier) {
         Column {
             Text("이런 도움이 필요해요.", fontSize = MaterialTheme.typography.titleLarge.fontSize)
             Spacer(Modifier.height(8.dp))

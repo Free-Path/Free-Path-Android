@@ -17,6 +17,7 @@ import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendStyleScreen(
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
@@ -24,6 +25,7 @@ fun RecommendStyleScreen(
     val checkedList = remember { viewModel.styleCheckList }
     RecommendStyleScreen(
         checkedList,
+        onClickBack,
         modifier,
         onClickNext,
         viewModel::changeStyleChecked,
@@ -33,14 +35,18 @@ fun RecommendStyleScreen(
 @Composable
 private fun RecommendStyleScreen(
     checkedList: List<Boolean>,
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     onClickNext: () -> Unit,
     onClickCheck: (Int) -> Unit,
 ) {
     val styles = stringArrayResource(R.array.styles)
-    RecommendFrame(onClickNext, modifier) {
+    RecommendFrame(onClickNext, onClickBack, modifier) {
         Column {
-            Text("방문하고 싶은\n여행지 스타일을 알려주세요!", fontSize = MaterialTheme.typography.titleLarge.fontSize)
+            Text(
+                "방문하고 싶은\n여행지 스타일을 알려주세요!",
+                fontSize = MaterialTheme.typography.titleLarge.fontSize
+            )
             Spacer(Modifier.height(8.dp))
             CheckBoxGroup(checkedList, onClickCheck, styles)
         }

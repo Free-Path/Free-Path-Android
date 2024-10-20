@@ -22,6 +22,7 @@ import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendTogetherScreen(
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
@@ -42,6 +43,7 @@ fun RecommendTogetherScreen(
         viewModel::minusPeopleCount,
         viewModel::plusPeopleCount,
         viewModel::changeAgeStateChecked,
+        onClickBack,
         modifier,
         onClickNext
     )
@@ -54,6 +56,7 @@ fun RecommendTogetherScreen(
     onClickMinusButton: () -> Unit,
     onClickPlusButton: () -> Unit,
     onClickChip: (Int) -> Unit,
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     onClickNext: () -> Unit,
 ) {
@@ -61,7 +64,7 @@ fun RecommendTogetherScreen(
     val buttonHeight = remember(configuration.screenHeightDp) {
         (configuration.screenHeightDp / 10).coerceIn(40..60).dp
     }
-    RecommendFrame(onClickNext = onClickNext, modifier = modifier) {
+    RecommendFrame(onClickNext = onClickNext, onClickBack = onClickBack, modifier = modifier) {
         Text("누구와 여행하시나요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
         Spacer(Modifier.height(8.dp))
         Text("같이 여행하는 인원의 연령대를 모두 골라주세요")

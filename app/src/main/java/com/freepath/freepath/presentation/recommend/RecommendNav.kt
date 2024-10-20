@@ -3,6 +3,7 @@ package com.freepath.freepath.presentation.recommend
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavBackStackEntry
@@ -23,39 +24,58 @@ fun RecommendNav(
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     recommendViewModel: RecommendViewModel = hiltViewModel(),
-    onClickBack: () -> Unit = {},
+    finishNav: () -> Unit = {},
 ) {
+    val context = LocalContext.current
     NavHost(
         navController = navController,
         startDestination = RecommendNavItem.Calendar,
         modifier = modifier
     ) {
+        println(navController.currentBackStackEntry?.destination?.route)
         composable<RecommendNavItem.Calendar> {
             RecommendCalendarScreen(
+                onClickBack = { finishNav() },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Together) }
             )
         }
         composable<RecommendNavItem.Together> {
             RecommendTogetherScreen(
+                onClickBack = {
+                    navController.navigate(RecommendNavItem.Calendar) {
+                        popUpTo(RecommendNavItem.Calendar)
+                    }
+                },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Disability) }
             )
         }
         composable<RecommendNavItem.Disability> {
             RecommendDisabilityScreen(
+                onClickBack = {
+                    navController.navigate(RecommendNavItem.Together) {
+                        popUpTo(RecommendNavItem.Together)
+                    }
+                },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Target) }
             )
         }
         composable<RecommendNavItem.Target> {
             RecommendTargetScreen(
+                onClickBack = {
+                    navController.navigate(RecommendNavItem.Disability) {
+                        popUpTo(RecommendNavItem.Disability)
+                    }
+                },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Style) }
             )
         }
         composable<RecommendNavItem.Style> {
             RecommendStyleScreen(
+                onClickBack = { navController.popBackStack() },
                 viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Wait) }
             )

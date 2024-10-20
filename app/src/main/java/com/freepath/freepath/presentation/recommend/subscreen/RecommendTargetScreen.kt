@@ -24,6 +24,7 @@ import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
 fun RecommendTargetScreen(
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
@@ -35,6 +36,7 @@ fun RecommendTargetScreen(
         environmentValue.toFloat(),
         onClickNext,
         viewModel::changeTargetChecked,
+        onClickBack,
         modifier
     ) { changedValue: Float ->
         viewModel.changeEnvironmentValue((changedValue + 0.1f).toInt())
@@ -47,11 +49,12 @@ private fun RecommendTargetScreen(
     environmentValue: Float,
     onClickNext: () -> Unit,
     onClickCheck: (Int) -> Unit,
+    onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     onValueChange: (Float) -> Unit,
 ) {
     val targetTextArray = stringArrayResource(R.array.targets)
-    RecommendFrame(onClickNext = onClickNext, modifier = modifier) {
+    RecommendFrame(onClickNext = onClickNext, onClickBack = onClickBack, modifier = modifier) {
         Text("여행의 목적이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
         Spacer(Modifier.height(8.dp))
         CheckBoxGroup(checkedList, onClickCheck, targetTextArray)
