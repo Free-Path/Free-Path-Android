@@ -3,7 +3,6 @@ package com.freepath.freepath.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -30,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.home.HomeScreen
 import com.freepath.freepath.presentation.planchange.PlanChangeScreen
+import com.freepath.freepath.presentation.recommend.RecommendNav
 import com.freepath.freepath.presentation.travel.TravelScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,7 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+//        enableEdgeToEdge()
         setContent {
             FreePathTheme {
                 MainScreenView()
@@ -115,10 +115,25 @@ fun NavigationGraph(navController: NavHostController) {
             HomeScreen(isInProgressTravel = true)
         }
         composable(BottomNavItem.Travel.screenRoute) {
-            TravelScreen()
+            TravelScreen(
+                onClickFloating = {
+                    navController.navigate("recommend")
+                }
+            )
         }
         composable(BottomNavItem.Welfare.screenRoute) {
-            PlanChangeScreen(onClickCancel = {}){}
+            PlanChangeScreen(onClickCancel = {}) {}
+        }
+        composable("recommend") {
+            RecommendNav(finishNav = { id ->
+                if (id == null) {
+                    // TODO: PlanScreen 이동
+                } else {
+                    navController.navigate(BottomNavItem.Travel.screenRoute) {
+                        popUpTo(BottomNavItem.Travel.screenRoute)
+                    }
+                }
+            })
         }
     }
 }
@@ -127,7 +142,7 @@ fun NavigationGraph(navController: NavHostController) {
 sealed class BottomNavItem(
     val navTitle: Int,
     val navIcon: Int,
-    val screenRoute: String
+    val screenRoute: String,
 ) {
     data object Home : BottomNavItem(
         navTitle = R.string.bnv_home,

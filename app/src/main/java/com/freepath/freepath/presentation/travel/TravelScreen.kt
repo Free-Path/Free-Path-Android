@@ -26,7 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.model.CurrentTravel
@@ -39,7 +39,10 @@ import com.freepath.freepath.ui.theme.Pretendard24
 import com.freepath.freepath.ui.theme.TitleGray
 
 @Composable
-fun TravelScreen() {
+fun TravelScreen(
+    onClickFloating: () -> Unit,
+    travelViewModel:TravelViewModel = hiltViewModel()
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -50,8 +53,6 @@ fun TravelScreen() {
                 .fillMaxSize(),
             color = Color.White
         ) {
-            val travelViewModel = viewModel<TravelViewModel>()
-
             Column(
                 modifier = Modifier
                     .padding(10.dp),
@@ -107,7 +108,7 @@ fun TravelScreen() {
         }
 
         FloatingActionButton(
-            onClick = { },
+            onClick = onClickFloating,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(16.dp)
