@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 android {
@@ -62,6 +63,7 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.androidx.compose.bom))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -108,8 +110,11 @@ dependencies {
 
     // network
     implementation(libs.retrofit)
+    implementation(libs.logging.interceptor)
 
     // json
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.retrofit2.serialization.converter)
 }
 
 fun getApiKey(propertyKey: String): String {
