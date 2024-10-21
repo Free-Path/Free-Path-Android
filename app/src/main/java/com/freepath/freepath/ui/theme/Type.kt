@@ -33,6 +33,11 @@ val Pretendard24 = TextStyle(
     fontWeight = FontWeight.ExtraBold,
     fontSize = 24.sp
 )
+val Pretendard20 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Bold,
+    fontSize = 20.sp
+)
 val Pretendard18 = TextStyle(
     fontFamily = Pretendard,
     fontWeight = FontWeight.SemiBold,
@@ -48,4 +53,11 @@ val Pretendard14 = TextStyle(
     fontWeight = FontWeight.Normal,
     fontSize = 14.sp
 )
+
+val Pretendard12 = TextStyle(
+    fontFamily = Pretendard,
+    fontWeight = FontWeight.Normal,
+    fontSize = 12.sp
+)
+
 
