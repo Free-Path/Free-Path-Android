@@ -42,7 +42,6 @@ fun TextShort(
     maxLines: Int = Int.MAX_VALUE,
     minLines: Int = 1,
     onTextLayout: ((TextLayoutResult) -> Unit)? = null,
-    style: TextStyle = LocalTextStyle.current,
 ) = Text(
     text = text,
     modifier = modifier,
@@ -60,7 +59,7 @@ fun TextShort(
     maxLines = maxLines,
     minLines = minLines,
     onTextLayout = onTextLayout,
-    style = style.copy(
+    style = TextStyle(
         lineHeight = 1.5.em,
         platformStyle = PlatformTextStyle(
             includeFontPadding = false
@@ -76,8 +75,8 @@ fun TextShort(
 @Composable
 private fun PreviewTextShort() {
     Column {
-        TextShort("Custom Text", Modifier.border(0.1.dp, Color.Black))
+        TextShort("Custom Text\nCustom Text", Modifier.border(0.1.dp, Color.Black))
         Spacer(Modifier.padding(2.dp))
-        Text("Default Text", Modifier.border(0.1.dp, Color.Black))
+        Text("Default Text\nDefault Text", Modifier.border(0.1.dp, Color.Black))
     }
 }
