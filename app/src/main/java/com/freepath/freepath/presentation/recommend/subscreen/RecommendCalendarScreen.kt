@@ -24,10 +24,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,29 +60,40 @@ fun RecommendCalendarScreen(
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
 ) {
+    val firstDay by remember { viewModel.firstDay }
+    val lastDay by remember { viewModel.secondDay }
     RecommendCalendarScreen(
+        firstDay = firstDay,
+        lastDay = lastDay,
         onClickNext = onClickNext,
         onClickBack = onClickBack,
+        changeDays = viewModel::updateDays,
         modifier = modifier
     )
 }
 
 @Composable
-fun RecommendCalendarScreen(
+private fun RecommendCalendarScreen(
+    firstDay: CalendarDay?,
+    lastDay: CalendarDay?,
     onClickBack: () -> Unit,
     onClickNext: () -> Unit,
+    changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     RecommendFrame(
         onClickBack = onClickBack,
         onClickNext = onClickNext
     ) {
-        CalendarLibrary(modifier)
+        CalendarLibrary(firstDay, lastDay, changeDays, modifier)
     }
 }
 
 @Composable
 fun CalendarLibrary(
+    firstDay: CalendarDay?,
+    lastDay: CalendarDay?,
+    changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -92,9 +101,7 @@ fun CalendarLibrary(
     val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
     val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
     val daysOfWeek = remember { daysOfWeek() }
-    var clickedFirst by remember { mutableStateOf<CalendarDay?>(null) }
-    var clickedSecond by remember { mutableStateOf<CalendarDay?>(null) }
-    val clickedRange = remember(clickedFirst, clickedSecond) { clickedFirst..clickedSecond }
+    val clickedRange = remember(firstDay, lastDay) { firstDay..lastDay }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -112,15 +119,12 @@ fun CalendarLibrary(
             dayContent = { day ->
                 Day(day, clickedRange = clickedRange) {
                     when {
-                        clickedFirst == null && clickedSecond == it -> clickedSecond = null
-                        clickedFirst == null -> clickedFirst = it
-                        clickedFirst == it -> clickedFirst = null
-                        clickedSecond == null -> clickedSecond = it
-                        clickedSecond == it -> clickedSecond = null
-                        else -> {
-                            clickedFirst = it
-                            clickedSecond = null
-                        }
+                        firstDay == null && lastDay == it -> changeDays(null, null)
+                        firstDay == null -> changeDays(it, lastDay)
+                        firstDay == it -> changeDays(null, lastDay)
+                        lastDay == null -> changeDays(firstDay, it)
+                        lastDay == it -> changeDays(firstDay, null)
+                        else -> changeDays(it, null)
                     }
                 }
             },
@@ -159,11 +163,11 @@ fun CalendarLibrary(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewCalendarLibrary() {
-    CalendarLibrary(Modifier.padding(16.dp))
+    CalendarLibrary(null, null, { _, _ -> }, Modifier.padding(16.dp))
 }
 
 @Composable
-fun Day(
+private fun Day(
     day: CalendarDay,
     modifier: Modifier = Modifier,
     clickedRange: CalendarDayRange? = null,
@@ -223,7 +227,7 @@ private fun PreviewDay() {
 }
 
 @Composable
-fun DaysOfWeekTitle(
+private fun DaysOfWeekTitle(
     month: CalendarMonth,
     daysOfWeek: List<DayOfWeek>,
     onClickBackButton: () -> Unit,
@@ -338,7 +342,7 @@ private fun PreviewSelectedDates() {
     )
 }
 
-operator fun CalendarDay.compareTo(other: CalendarDay): Int {
+private operator fun CalendarDay.compareTo(other: CalendarDay): Int {
     return date.compareTo(other.date)
 }
 

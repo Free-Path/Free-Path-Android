@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kizitonwose.calendar.core.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -12,6 +13,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RecommendViewModel @Inject constructor() : ViewModel() {
+    var firstDay = mutableStateOf<CalendarDay?>(null)
+        private set
+    var secondDay = mutableStateOf<CalendarDay?>(null)
+        private set
+
     private val _disabilityCheckList = mutableStateListOf(*Array(10) { false })
     val disabilityCheckList: List<Boolean> = _disabilityCheckList
 
@@ -32,6 +38,11 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     var isCreationComplete = mutableStateOf(false)
         private set
+
+    fun updateDays(firstDay: CalendarDay?, secondDay: CalendarDay?) {
+        this.firstDay.value = firstDay
+        this.secondDay.value = secondDay
+    }
 
     fun plusPeopleCount() {
         if (peopleCount.intValue < 20) {
