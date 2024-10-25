@@ -31,7 +31,6 @@ import com.freepath.freepath.presentation.common.navigateToActivity
 import com.freepath.freepath.presentation.home.HomeScreen
 import com.freepath.freepath.presentation.plan.PlanActivity
 import com.freepath.freepath.presentation.plan.PlanActivity.Companion.PLAN_ID
-import com.freepath.freepath.presentation.planchange.PlanChangeScreen
 import com.freepath.freepath.presentation.recommend.RecommendNav
 import com.freepath.freepath.presentation.travel.TravelScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
@@ -126,7 +125,7 @@ fun NavigationGraph(navController: NavHostController) {
             )
         }
         composable(BottomNavItem.Welfare.screenRoute) {
-            PlanChangeScreen(onClickCancel = {}) {}
+            WelfareScreen()
         }
         composable("recommend") {
             RecommendNav(finishNav = { id ->
