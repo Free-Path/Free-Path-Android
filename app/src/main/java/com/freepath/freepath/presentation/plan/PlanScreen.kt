@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.freepath.freepath.presentation.common.FirstTimeLaunchEffect
 import com.freepath.freepath.presentation.common.showToast
 import com.freepath.freepath.presentation.model.Plan
 import com.freepath.freepath.presentation.model.PlanDetail
@@ -49,9 +50,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PlanScreen(
+    planId: Int,
     viewModel: PlanViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
 ) {
+    FirstTimeLaunchEffect(Unit) {
+        viewModel.updatePlanId(planId)
+    }
     val plan by viewModel.plan.collectAsStateWithLifecycle()
     val context = LocalContext.current
     PlanScreen(
@@ -69,13 +74,13 @@ fun PlanScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlanScreen(
-    plan: Plan,
+    plan: Plan?,
     modifier: Modifier = Modifier,
     onClickPlanItem: (PlanDetail) -> Unit = {},
     onClickChangePlan: () -> Unit = {},
 ) {
 //    val screenHeight = LocalContext.current.resources.displayMetrics.heightPixels
-    val planDates = plan.planDates
+    val planDates = plan?.planDates ?: emptyList()
     val context = LocalContext.current
     val sheetState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -93,7 +98,7 @@ private fun PlanScreen(
         sheetContent = {
             PlanColumn(
                 planDates = planDates,
-                dates = plan.dates,
+                dates = plan?.dates ?: emptyList(),
                 onClickPlanDetail = onClickPlanItem,
                 onClickChangePlan = onClickChangePlan,
                 modifier = Modifier
