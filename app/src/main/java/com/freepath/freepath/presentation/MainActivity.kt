@@ -27,7 +27,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.R
+import com.freepath.freepath.presentation.common.navigateToActivity
 import com.freepath.freepath.presentation.home.HomeScreen
+import com.freepath.freepath.presentation.plan.PlanActivity
+import com.freepath.freepath.presentation.plan.PlanActivity.Companion.PLAN_ID
 import com.freepath.freepath.presentation.planchange.PlanChangeScreen
 import com.freepath.freepath.presentation.recommend.RecommendNav
 import com.freepath.freepath.presentation.travel.TravelScreen
@@ -110,6 +113,7 @@ fun BottomNavigation(navController: NavHostController) {
 
 @Composable
 fun NavigationGraph(navController: NavHostController) {
+    val context = navController.context
     NavHost(navController = navController, startDestination = BottomNavItem.Home.screenRoute) {
         composable(BottomNavItem.Home.screenRoute) {
             HomeScreen(isInProgressTravel = true)
@@ -126,11 +130,12 @@ fun NavigationGraph(navController: NavHostController) {
         }
         composable("recommend") {
             RecommendNav(finishNav = { id ->
-                if (id == null) {
-                    // TODO: PlanScreen 이동
-                } else {
-                    navController.navigate(BottomNavItem.Travel.screenRoute) {
-                        popUpTo(BottomNavItem.Travel.screenRoute)
+                navController.navigate(BottomNavItem.Travel.screenRoute) {
+                    popUpTo(BottomNavItem.Travel.screenRoute)
+                }
+                if (id != null) {
+                    navigateToActivity(context, PlanActivity::class.java) {
+                        putExtra(PLAN_ID, id)
                     }
                 }
             })

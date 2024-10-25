@@ -86,6 +86,7 @@ fun RecommendNav(
         composable<RecommendNavItem.Wait> {
             RecommendWaitScreen(
                 viewModel = recommendViewModel,
+                goPlanScreen = finishNav
             )
         }
     }

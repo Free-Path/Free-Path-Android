@@ -1,5 +1,6 @@
 package com.freepath.freepath.presentation.travel
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,14 +25,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
+import com.freepath.freepath.presentation.common.navigateToActivity
 import com.freepath.freepath.presentation.model.CurrentTravel
 import com.freepath.freepath.presentation.model.PreviousTravel
 import com.freepath.freepath.presentation.model.UpcomingTravel
+import com.freepath.freepath.presentation.plan.PlanActivity
 import com.freepath.freepath.ui.theme.Pretendard14
 import com.freepath.freepath.ui.theme.Pretendard16
 import com.freepath.freepath.ui.theme.Pretendard18
@@ -41,7 +45,7 @@ import com.freepath.freepath.ui.theme.TitleGray
 @Composable
 fun TravelScreen(
     onClickFloating: () -> Unit,
-    travelViewModel:TravelViewModel = hiltViewModel()
+    travelViewModel: TravelViewModel = hiltViewModel(),
 ) {
     Box(
         modifier = Modifier
@@ -124,10 +128,16 @@ fun TravelScreen(
 
 @Composable
 fun CurrentTravelCard(currentTravel: CurrentTravel) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable {
+                navigateToActivity(context, PlanActivity::class.java) {
+                    putExtra(PlanActivity.PLAN_ID, 10)
+                }
+            },
         shape = RoundedCornerShape(15.dp)
     ) {
         Box(
