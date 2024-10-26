@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kizitonwose.calendar.core.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -78,9 +77,7 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
     }
 
     fun getRecommendPlan() {
-        println("getRecommendPlan")
         viewModelScope.launch {
-            delay(3_000L)
             isCreationComplete.value = true
         }
     }
