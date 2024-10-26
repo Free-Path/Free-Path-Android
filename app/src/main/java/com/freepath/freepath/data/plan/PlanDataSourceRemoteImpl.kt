@@ -1,13 +1,14 @@
 package com.freepath.freepath.data.plan
 
 import com.freepath.freepath.presentation.model.Plan
+import com.freepath.freepath.presentation.model.Recommend
 import com.freepath.freepath.presentation.model.planEx
-import java.io.IOException
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class PlanDataSourceRemoteImpl @Inject constructor(
-    private val planService: PlanService
-): PlanDataSourceRemote {
+    private val planService: PlanService,
+) : PlanDataSourceRemote {
     override suspend fun updatePlan(id: Int, plan: Plan): Result<Unit> {
         return Result.success(Unit)
     }
@@ -28,7 +29,8 @@ class PlanDataSourceRemoteImpl @Inject constructor(
         return Result.success(PlanResponse(planEx))
     }
 
-    override suspend fun getRecommendedPlan(): Result<Int> {
-        TODO("Not yet implemented")
+    override suspend fun getRecommendedPlan(recommend: Recommend): Result<Int> {
+        delay(2000)
+        return Result.success(10)
     }
 }
