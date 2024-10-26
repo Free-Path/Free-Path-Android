@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,72 +25,73 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.freepath.freepath.R
-import com.freepath.freepath.presentation.model.Plan
+import com.freepath.freepath.presentation.common.FirstTimeLaunchEffect
+import com.freepath.freepath.presentation.common.showToast
 import com.freepath.freepath.presentation.model.PlanDetail
 import com.freepath.freepath.presentation.model.planDetailEx
 import com.freepath.freepath.presentation.plan.PlanItemDetail
 import com.freepath.freepath.presentation.util.getName
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 @Composable
 fun PlanChangeScreen(
+    planId: Int,
     modifier: Modifier = Modifier,
     viewModel: PlanChangeViewModel = hiltViewModel(),
     onClickCancel: () -> Unit,
     onClickComplete: () -> Unit,
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    FirstTimeLaunchEffect(Unit) {
+        viewModel.updatePlanId(planId)
+    }
     val plan by viewModel.plan.collectAsState()
-    PlanChangeScreen(plan, modifier, onClickCancel, onClickComplete,
-        onClickAdd = { index ->
-            viewModel.addPlanDetail(index, plan.planDates.first().planDetails.first())
-        }, 
-        onClickChangePosition = {
-            // TODO: 여행지 순서 변경
-        }, 
-        onClickChangeLocation = {
-            // TODO: 다른 여행지로 변경
-        })
-}
-
-@Composable
-private fun PlanChangeScreen(
-    plan: Plan,
-    modifier: Modifier = Modifier,
-    onClickCancel: () -> Unit,
-    onClickComplete: () -> Unit,
-    onClickAdd: (Int) -> Unit,
-    onClickChangePosition: () -> Unit,
-    onClickChangeLocation: () -> Unit,
-) {
-    println(plan.planDates.first().planDetails.size)
     val planDetailsList by remember(plan) {
         derivedStateOf {
-            plan.planDates.map { it.planDetails }
+            plan?.planDates?.map { it.planDetails }
         }
     }
-    PlanChange(
-        plan.dates,
-        planDetailsList,
-        modifier,
-        onClickAdd,
-        onClickCancel,
-        onClickComplete
+    PlanChangeScreen(
+        dates = plan?.dates ?: emptyList(),
+        planDetailsList = planDetailsList ?: emptyList(),
+        modifier = modifier,
+        onClickAdd = { index ->
+            plan?.let { castedPlan ->
+                viewModel.addPlanDetail(index, castedPlan.planDates.first().planDetails.first())
+            }
+        },
+        onClickComplete = {
+            coroutineScope.launch {
+                if (viewModel.updatePlan()) {
+                    onClickComplete()
+                } else {
+                    context.showToast("업데이트에 실패했습니다")
+                }
+            }
+        },
+        onClickCancel = {
+            onClickCancel()
+        }
     )
 }
 
 @Composable
-private fun PlanChange(
+private fun PlanChangeScreen(
     dates: List<LocalDate>,
     planDetailsList: List<List<PlanDetail>>,
     modifier: Modifier = Modifier,
@@ -97,24 +99,33 @@ private fun PlanChange(
     onClickCancel: () -> Unit,
     onClickComplete: () -> Unit,
 ) {
-    Column(modifier.fillMaxWidth()) {
-        TopMenu(onClickCancel, onClickComplete)
-        LazyColumn {
-            itemsIndexed(planDetailsList) { index, planDetails ->
-                if (index != 0) {
-                    HorizontalDivider(Modifier.padding(vertical = 4.dp))
-                }
-                DayTitle(index + 1, dates[index]) {
-                    onClickAdd(index)
-                }
-                if (planDetails.isNotEmpty()) {
-                    planDetails.forEach { plan ->
-                        PlanDetailChangeable(plan) {
-                            // TODO: 아이템 체크 이벤트 발생
-                        }
+    if (dates.isEmpty() || planDetailsList.isEmpty()) {
+        Text(
+            "데이터가 없습니다.",
+            modifier = modifier.fillMaxSize(),
+            textAlign = TextAlign.Center,
+            fontSize = MaterialTheme.typography.headlineLarge.fontSize
+        )
+    } else {
+        Column(modifier.fillMaxWidth()) {
+            TopMenu(onClickCancel, onClickComplete)
+            LazyColumn {
+                itemsIndexed(planDetailsList) { index, planDetails ->
+                    if (index != 0) {
+                        HorizontalDivider(Modifier.padding(vertical = 4.dp))
                     }
-                } else {
-                    Text("장소를 추가해주세요", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    DayTitle(index + 1, dates[index]) {
+                        onClickAdd(index)
+                    }
+                    if (planDetails.isNotEmpty()) {
+                        planDetails.forEach { plan ->
+                            PlanDetailChangeable(plan) {
+                                // TODO: 아이템 체크 이벤트 발생
+                            }
+                        }
+                    } else {
+                        Text("장소를 추가해주세요", Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+                    }
                 }
             }
         }

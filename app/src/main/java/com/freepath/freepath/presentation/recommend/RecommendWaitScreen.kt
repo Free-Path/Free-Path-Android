@@ -71,7 +71,7 @@ fun RecommendWaitScreen(
                     modifier = Modifier
                         .clip(ShapeDefaults.ExtraLarge)
                         .background(MaterialTheme.colorScheme.surfaceVariant)
-                        .clickable { goPlanScreen(null) }
+                        .clickable { goPlanScreen(10) }
                         .padding(12.dp)
                         .size(40.dp)
                 )

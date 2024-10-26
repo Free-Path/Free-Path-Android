@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,14 +12,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.KeyboardBackspace
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
+import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -30,9 +34,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.freepath.freepath.presentation.common.FirstTimeLaunchEffect
 import com.freepath.freepath.presentation.common.showToast
 import com.freepath.freepath.presentation.model.Plan
 import com.freepath.freepath.presentation.model.PlanDetail
@@ -49,33 +55,37 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun PlanScreen(
+    planId: Int,
     viewModel: PlanViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
+    onClickPlanItem: (PlanDetail) -> Unit,
+    onClickChangePlan: () -> Unit,
+    onClickBack: () -> Unit,
 ) {
+    FirstTimeLaunchEffect(Unit) {
+        viewModel.updatePlanId(planId)
+    }
     val plan by viewModel.plan.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     PlanScreen(
         plan,
         modifier,
-        {
-            context.showToast("PlanItem Clicked: ${it.title}")
-        },
-        {
-            context.showToast("ChangePlan Clicked")
-        }
+        onClickPlanItem,
+        onClickChangePlan,
+        onClickBack = onClickBack
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun PlanScreen(
-    plan: Plan,
+    plan: Plan?,
     modifier: Modifier = Modifier,
     onClickPlanItem: (PlanDetail) -> Unit = {},
     onClickChangePlan: () -> Unit = {},
+    onClickBack: () -> Unit = {},
 ) {
 //    val screenHeight = LocalContext.current.resources.displayMetrics.heightPixels
-    val planDates = plan.planDates
+    val planDates = plan?.planDates ?: emptyList()
     val context = LocalContext.current
     val sheetState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
@@ -85,52 +95,65 @@ private fun PlanScreen(
             sheetState.bottomSheetState.currentValue == SheetValue.Expanded
         }
     }
-
-    BottomSheetScaffold(
-        sheetContainerColor = MaterialTheme.colorScheme.surface,
-        modifier = modifier,
-        scaffoldState = sheetState,
-        sheetContent = {
-            PlanColumn(
-                planDates = planDates,
-                dates = plan.dates,
-                onClickPlanDetail = onClickPlanItem,
-                onClickChangePlan = onClickChangePlan,
-                modifier = Modifier
-                    .fillMaxHeight(0.5f)
-                    .fillMaxWidth()
-            ) { bool ->
-                isStartReached = bool
-            }
-        },
-        sheetPeekHeight = 120.dp,
-        content = { innerPadding ->
-            MapContent(
-                onMarkerClick = {
-                    context.showToast("Marker Clicked: ${it.latitude}, ${it.longitude}")
-                },
-                onMapClick = {
-                    coroutineScope.launch {
-                        sheetState.bottomSheetState.partialExpand()
+    Box(modifier) {
+        BottomSheetScaffold(
+            sheetContainerColor = MaterialTheme.colorScheme.surface,
+            modifier = Modifier,
+            scaffoldState = sheetState,
+            sheetContent = {
+                if (plan == null || planDates.isEmpty()) {
+                    Text(
+                        "데이터가 없습니다.",
+                        modifier = modifier.fillMaxSize(),
+                        textAlign = TextAlign.Center,
+                        fontSize = MaterialTheme.typography.bodyLarge.fontSize
+                    )
+                } else {
+                    PlanColumn(
+                        planDates = planDates,
+                        dates = plan.dates,
+                        onClickPlanDetail = onClickPlanItem,
+                        onClickChangePlan = onClickChangePlan,
+                        modifier = Modifier
+                            .fillMaxHeight(0.5f)
+                            .fillMaxWidth()
+                    ) { bool ->
+                        isStartReached = bool
                     }
-                },
-                modifier = Modifier.padding(innerPadding)
-            )
-        },
-        sheetSwipeEnabled = false,
+                }
+            },
+            sheetPeekHeight = 120.dp,
+            content = { innerPadding ->
+                MapContent(
+                    onMarkerClick = {
+                        context.showToast("Marker Clicked: ${it.latitude}, ${it.longitude}")
+                    },
+                    onMapClick = {
+                        coroutineScope.launch {
+                            sheetState.bottomSheetState.partialExpand()
+                        }
+                    },
+                    modifier = Modifier.padding(innerPadding)
+                )
+            },
+            sheetSwipeEnabled = false,
 //        sheetSwipeEnabled = isExpanded.not()|| isStartReached,
-        sheetDragHandle = {
-            BottomSheetDragHandler(isExpanded) {
-                coroutineScope.launch {
-                    if (isExpanded) {
-                        sheetState.bottomSheetState.partialExpand()
-                    } else {
-                        sheetState.bottomSheetState.expand()
+            sheetDragHandle = {
+                BottomSheetDragHandler(isExpanded) {
+                    coroutineScope.launch {
+                        if (isExpanded) {
+                            sheetState.bottomSheetState.partialExpand()
+                        } else {
+                            sheetState.bottomSheetState.expand()
+                        }
                     }
                 }
             }
+        )
+        IconButton(onClickBack) {
+            Icon(Icons.AutoMirrored.Filled.KeyboardBackspace, "뒤로가기")
         }
-    )
+    }
 }
 
 @Composable
