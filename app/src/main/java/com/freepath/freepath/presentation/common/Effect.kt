@@ -8,7 +8,7 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun FirstTimeLaunchEffect(
-    key: Any,
+    key: Any = Unit,
     onLaunch: CoroutineScope.() -> Unit,
 ) {
     val launched = rememberSaveable { mutableStateOf(false) }

@@ -1,5 +1,6 @@
 package com.freepath.freepath.presentation.recommend
 
+import android.util.Log
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +33,9 @@ class RecommendViewModel @Inject constructor(
     val ageStateList: List<Boolean> = _ageStateList
 
     var environmentValue = mutableIntStateOf(4)
+        private set
+
+    var destination = mutableStateOf("")
         private set
 
     private val _themeCheckList = mutableStateListOf(*Array(10) { false })
@@ -75,6 +79,10 @@ class RecommendViewModel @Inject constructor(
         environmentValue.intValue = value
     }
 
+    fun selectDestination(value: String) {
+        destination.value = value
+    }
+
     fun changeThemeChecked(index: Int) {
         _themeCheckList[index] = themeCheckList[index].not()
     }
@@ -112,6 +120,7 @@ class RecommendViewModel @Inject constructor(
                         .filterNotNull(),
                     environments = environmentValue.intValue
                 )
+                Log.d(TAG, "recommend $recommend")
                 planDataSourceRemote.getRecommendedPlan(recommend)
                     .onSuccess {
                         isCreationComplete.value = true
@@ -120,5 +129,9 @@ class RecommendViewModel @Inject constructor(
                 e.printStackTrace()
             }
         }
+    }
+
+    companion object {
+        const val TAG = "RecommendViewModel"
     }
 }

@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendCalendarScreen
+import com.freepath.freepath.presentation.recommend.subscreen.RecommendDestinationScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendDisabilityScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendStyleScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendTargetScreen
@@ -33,14 +34,25 @@ fun RecommendNav(
             RecommendCalendarScreen(
                 onClickBack = { finishNav(null) },
                 viewModel = recommendViewModel,
+                onClickNext = { navController.navigate(RecommendNavItem.Destination) }
+            )
+        }
+        composable<RecommendNavItem.Destination> {
+            RecommendDestinationScreen(
+                onClickBack = {
+                    navController.navigate(RecommendNavItem.Calendar) {
+                        popUpTo(RecommendNavItem.Calendar)
+                    }
+                },
+                viewModel = recommendViewModel,
                 onClickNext = { navController.navigate(RecommendNavItem.Together) }
             )
         }
         composable<RecommendNavItem.Together> {
             RecommendTogetherScreen(
                 onClickBack = {
-                    navController.navigate(RecommendNavItem.Calendar) {
-                        popUpTo(RecommendNavItem.Calendar)
+                    navController.navigate(RecommendNavItem.Destination) {
+                        popUpTo(RecommendNavItem.Destination)
                     }
                 },
                 viewModel = recommendViewModel,
@@ -115,6 +127,9 @@ sealed class RecommendNavItem {
 
     @Serializable
     data object Calendar : RecommendNavItem()
+
+    @Serializable
+    data object Destination : RecommendNavItem()
 
     @Serializable
     data object Wait : RecommendNavItem()
