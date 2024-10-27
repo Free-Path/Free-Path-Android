@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendCalendarScreen
-import com.freepath.freepath.presentation.recommend.subscreen.RecommendDestinationScreen
+import com.freepath.freepath.presentation.recommend.subscreen.RecommendDestinationEnvironmentScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendDisabilityScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendStyleScreen
 import com.freepath.freepath.presentation.recommend.subscreen.RecommendTargetScreen
@@ -34,11 +34,11 @@ fun RecommendNav(
             RecommendCalendarScreen(
                 onClickBack = { finishNav(null) },
                 viewModel = recommendViewModel,
-                onClickNext = { navController.navigate(RecommendNavItem.Destination) }
+                onClickNext = { navController.navigate(RecommendNavItem.DestinationEnvironment) }
             )
         }
-        composable<RecommendNavItem.Destination> {
-            RecommendDestinationScreen(
+        composable<RecommendNavItem.DestinationEnvironment> {
+            RecommendDestinationEnvironmentScreen(
                 onClickBack = {
                     navController.navigate(RecommendNavItem.Calendar) {
                         popUpTo(RecommendNavItem.Calendar)
@@ -51,8 +51,8 @@ fun RecommendNav(
         composable<RecommendNavItem.Together> {
             RecommendTogetherScreen(
                 onClickBack = {
-                    navController.navigate(RecommendNavItem.Destination) {
-                        popUpTo(RecommendNavItem.Destination)
+                    navController.navigate(RecommendNavItem.DestinationEnvironment) {
+                        popUpTo(RecommendNavItem.DestinationEnvironment)
                     }
                 },
                 viewModel = recommendViewModel,
@@ -129,7 +129,7 @@ sealed class RecommendNavItem {
     data object Calendar : RecommendNavItem()
 
     @Serializable
-    data object Destination : RecommendNavItem()
+    data object DestinationEnvironment : RecommendNavItem()
 
     @Serializable
     data object Wait : RecommendNavItem()
