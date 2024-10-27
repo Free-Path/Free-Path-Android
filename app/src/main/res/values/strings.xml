@@ -18,13 +18,15 @@
         <item>70대 이상</item>
     </string-array>
     <string-array name="disabilities">
-        <item>휠체어가 필요해요.</item>
+        <item>휠체어로 이동이 가능해야 해요.</item>
         <item>엘리베이터가 필요해요.</item>
+        <item>유모차로 이동이 가능해야 해요.</item>
         <item>보조 안내견 동반이 가능해야 해요.</item>
         <item>수화 안내가 필요해요.</item>
         <item>오디오 가이드가 필요해요.</item>
         <item>점자 블록이 필요해요.</item>
         <item>점자 홍보물이 필요해요.</item>
+        <item>안내요원이 필요해요.</item>
     </string-array>
     <string-array name="targets">
         <item>일상적인 환경 및 역할에서의 탈출, 지루함 탈피</item>
@@ -49,6 +51,29 @@
         <item>역사 탐방, 문화적 경험 등 교육적 동기</item>
         <item>특별한 목적(칠순여행, 신혼여행, 수학여행, 인센티브여행)</item>
         <item>기타</item>
+    </string-array>
+    <string-array name="themes">
+        <item>쇼핑</item>
+        <item>테마파크, 놀이시설, 동/식물원 방문</item>
+        <item>역사 유적지 방문</item>
+        <item>시티투어</item>
+        <item>야외 스포츠, 레포츠 활동</item>
+        <item>지역 문화예술/공연/전시시설 관람</item>
+        <item>유흥/오락(나이트라이프)</item>
+        <item>캠핑</item>
+        <item>지역 축제/이벤트 참가</item>
+        <item>온천/스파</item>
+        <item>교육/체험 프로그램 참가</item>
+        <item>드라마 촬영지 방문</item>
+        <item>종교/성지 순례</item>
+        <item>Well-ness 여행</item>
+        <item>SNS 인생샷 여행</item>
+        <item>호캉스 여행</item>
+        <item>신규 여행지 발굴</item>
+        <item>반려동물 동반 여행</item>
+        <item>인플루언서 따라하기 여행</item>
+        <item>친환경 여행(플로깅 여행)</item>
+        <item>등반 여행</item>
     </string-array>
 
     <!-- bottom navigation -->

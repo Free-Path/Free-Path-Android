@@ -5,13 +5,18 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.freepath.freepath.data.plan.PlanDataSourceRemote
+import com.freepath.freepath.presentation.model.Disability
+import com.freepath.freepath.presentation.model.Recommend
 import com.kizitonwose.calendar.core.CalendarDay
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecommendViewModel @Inject constructor() : ViewModel() {
+class RecommendViewModel @Inject constructor(
+    private val planDataSourceRemote: PlanDataSourceRemote,
+) : ViewModel() {
     var firstDay = mutableStateOf<CalendarDay?>(null)
         private set
     var secondDay = mutableStateOf<CalendarDay?>(null)
@@ -28,6 +33,9 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     var environmentValue = mutableIntStateOf(4)
         private set
+
+    private val _themeCheckList = mutableStateListOf(*Array(10) { false })
+    val themeCheckList: List<Boolean> = _themeCheckList
 
     private val _targetCheckList = mutableStateListOf(*Array(10) { false })
     val targetCheckList: List<Boolean> = _targetCheckList
@@ -57,7 +65,6 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     fun changeAgeStateChecked(index: Int) {
         _ageStateList[index] = ageStateList[index].not()
-        println(_ageStateList)
     }
 
     fun changeDisabilityChecked(index: Int) {
@@ -66,6 +73,10 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     fun changeEnvironmentValue(value: Int) {
         environmentValue.intValue = value
+    }
+
+    fun changeThemeChecked(index: Int) {
+        _themeCheckList[index] = themeCheckList[index].not()
     }
 
     fun changeTargetChecked(index: Int) {
@@ -78,7 +89,36 @@ class RecommendViewModel @Inject constructor() : ViewModel() {
 
     fun getRecommendPlan() {
         viewModelScope.launch {
-            isCreationComplete.value = true
+            try {
+                val recommend = Recommend(
+                    firstDay = firstDay.value!!.date,
+                    lastDay = secondDay.value!!.date,
+                    peopleCount = peopleCount.intValue,
+                    destination = "서울",
+                    disabilities = ageStateList
+                        .mapIndexed { index, bool -> if (bool) Disability.entries[index] else null }
+                        .filterNotNull(),
+                    ages = ageStateList
+                        .mapIndexed { index, bool -> if (bool) index + 1 else null }
+                        .filterNotNull(),
+                    themes = themeCheckList
+                        .mapIndexed { index, bool -> if (bool) index + 1 else null }
+                        .filterNotNull(),
+                    targets = targetCheckList
+                        .mapIndexed { index, bool -> if (bool) index + 1 else null }
+                        .filterNotNull(),
+                    visits = styleCheckList
+                        .mapIndexed { index, bool -> if (bool) index + 1 else null }
+                        .filterNotNull(),
+                    environments = environmentValue.intValue
+                )
+                planDataSourceRemote.getRecommendedPlan(recommend)
+                    .onSuccess {
+                        isCreationComplete.value = true
+                    }
+            } catch (e: NullPointerException) {
+                e.printStackTrace()
+            }
         }
     }
 }
