@@ -1,5 +1,8 @@
 package com.freepath.freepath.presentation.home
 
+import android.content.Context
+import android.content.Intent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,14 +24,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
-import com.freepath.freepath.presentation.model.RecommendedTouristSpot
 import com.freepath.freepath.presentation.model.CurrentTravel
+import com.freepath.freepath.presentation.model.RecommendedTouristSpot
+import com.freepath.freepath.presentation.travel.detail.TouristSpotDetailActivity
 import com.freepath.freepath.ui.theme.FreePathTheme
 import com.freepath.freepath.ui.theme.Pretendard14
 import com.freepath.freepath.ui.theme.Pretendard16
@@ -80,7 +85,10 @@ fun HomeScreen(isInProgressTravel: Boolean) {
                     .padding(10.dp, 5.dp)
             )
 
-            recommendedTouristSpot(recommendTouristSpot = homeViewModel.mockRecommendedTouristSpot)
+            recommendedTouristSpot(
+                recommendTouristSpot = homeViewModel.mockRecommendedTouristSpot,
+                context = LocalContext.current
+            )
         }
     }
 }
@@ -131,7 +139,7 @@ fun upComingTravel(currentTravel: CurrentTravel) {
 }
 
 @Composable
-fun recommendedTouristSpot(recommendTouristSpot: List<RecommendedTouristSpot>) {
+fun recommendedTouristSpot(recommendTouristSpot: List<RecommendedTouristSpot>, context: Context) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -148,7 +156,8 @@ fun recommendedTouristSpot(recommendTouristSpot: List<RecommendedTouristSpot>) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(5.dp),
+                            .padding(5.dp)
+                            .clickable { navigateToTouristDetailActivity(context) },
                         shape = RoundedCornerShape(15.dp)
                     ) {
                         Column(
@@ -231,6 +240,11 @@ private fun testColumn(columnHeights: IntArray): Int {
     }
 
     return columnIndex
+}
+
+private fun navigateToTouristDetailActivity(context: Context) {
+    val intent = Intent(context, TouristSpotDetailActivity::class.java)
+    context.startActivity(intent)
 }
 
 @Preview(showBackground = true)
