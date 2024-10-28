@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -81,10 +83,19 @@ private fun RecommendCalendarScreen(
     changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val dayRange = firstDay..lastDay
     RecommendFrame(
         onClickBack = onClickBack,
-        onClickNext = onClickNext
+        onClickNext = onClickNext,
+        isEnabledNextButton = (dayRange?.diffDay() ?: 1000) in 1..2,
     ) {
+        Text(
+            "❗ 여행 일정은 2~3일만 선택 가능합니다.",
+            Modifier.fillMaxWidth(),
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(8.dp))
         CalendarLibrary(firstDay, lastDay, changeDays, modifier)
     }
 }
@@ -190,12 +201,12 @@ private fun Day(
                 interactionSource = remember { MutableInteractionSource() }) { onClick(day) }
             .aspectRatio(1f)
             .thenIf(clickedRange != null && day in clickedRange) {
-                if (day == clickedRange!!.first || day == clickedRange.last) {
+                if (day.date == clickedRange!!.first.date || day.date == clickedRange.last.date) {
                     Modifier
                         .padding(vertical = 4.dp)
                         .background(
                             colorScheme.surfaceContainerHigh,
-                            if (day == clickedRange.first) {
+                            if (day.date == clickedRange.first.date) {
                                 RoundedCornerShape(topStartPercent = 30, bottomStartPercent = 30)
                             } else {
                                 RoundedCornerShape(topEndPercent = 30, bottomEndPercent = 30)
@@ -297,7 +308,7 @@ fun SelectedDays(
     selectedRange: CalendarDayRange?,
     modifier: Modifier = Modifier,
 ) {
-    if (selectedRange == null) return
+    if (selectedRange == null || selectedRange.diffDay() == 1L) return
     val first = selectedRange.first.date
     val last = selectedRange.last.date
     val diffDay = selectedRange.diffDay()
