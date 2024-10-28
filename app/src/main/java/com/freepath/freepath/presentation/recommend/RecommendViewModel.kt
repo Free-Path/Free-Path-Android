@@ -1,6 +1,7 @@
 package com.freepath.freepath.presentation.recommend
 
 import android.util.Log
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -47,7 +48,7 @@ class RecommendViewModel @Inject constructor(
     private val _styleCheckList = mutableStateListOf(*Array(10) { false })
     val styleCheckList: List<Boolean> = _styleCheckList
 
-    var isCreationComplete = mutableStateOf(false)
+    var isCreationComplete: MutableState<Boolean?> = mutableStateOf(null)
         private set
 
     fun updateDays(firstDay: CalendarDay?, secondDay: CalendarDay?) {
@@ -124,9 +125,12 @@ class RecommendViewModel @Inject constructor(
                 planDataSourceRemote.getRecommendedPlan(recommend)
                     .onSuccess {
                         isCreationComplete.value = true
+                    }.onFailure {
+                        isCreationComplete.value = false
                     }
             } catch (e: NullPointerException) {
                 e.printStackTrace()
+                isCreationComplete.value = false
             }
         }
     }
