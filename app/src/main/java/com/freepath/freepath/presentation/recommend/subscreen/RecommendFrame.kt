@@ -30,6 +30,7 @@ fun RecommendFrame(
     onClickBack: () -> Unit = {},
     modifier: Modifier = Modifier,
     scrollState: ScrollState = rememberScrollState(),
+    isEnabledNextButton: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
@@ -56,10 +57,11 @@ fun RecommendFrame(
             }
             Button(
                 onClick = onClickNext,
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth(0.5f)
                     .padding(vertical = 8.dp)
-                    .align(Alignment.CenterHorizontally)
+                    .align(Alignment.CenterHorizontally),
+                enabled = isEnabledNextButton,
             ) {
                 Text("다음", Modifier.padding(vertical = 8.dp))
             }

@@ -1,5 +1,6 @@
 package com.freepath.freepath.presentation.recommend.subscreen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
@@ -15,35 +16,39 @@ import com.freepath.freepath.presentation.common.CheckBoxGroup
 import com.freepath.freepath.presentation.recommend.RecommendViewModel
 
 @Composable
-fun RecommendTargetScreen(
+fun RecommendThemeScreen(
     onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
 ) {
-    val checkedList = remember { viewModel.targetCheckList }
-    RecommendTargetScreen(
+    val checkedList = remember { viewModel.themeCheckList }
+    RecommendThemeScreen(
         checkedList,
-        onClickNext,
-        viewModel::changeTargetChecked,
         onClickBack,
-        modifier
+        modifier,
+        onClickNext,
+        viewModel::changeThemeChecked,
     )
 }
 
 @Composable
-private fun RecommendTargetScreen(
+private fun RecommendThemeScreen(
     checkedList: List<Boolean>,
-    onClickNext: () -> Unit,
-    onClickCheck: (Int) -> Unit,
     onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
+    onClickNext: () -> Unit,
+    onClickCheck: (Int) -> Unit,
 ) {
-    val targetTextArray = stringArrayResource(R.array.targets)
-    RecommendFrame(onClickNext = onClickNext, onClickBack = onClickBack, modifier = modifier) {
-        Text("여행의 목적이 무엇인가요?", fontSize = MaterialTheme.typography.titleLarge.fontSize)
-        Spacer(Modifier.height(8.dp))
-        CheckBoxGroup(checkedList, onClickCheck, targetTextArray)
-
+    val stringArray = stringArrayResource(R.array.themes)
+    RecommendFrame(onClickNext, onClickBack, modifier) {
+        Column {
+            Text(
+                "원하는 여행지 테마를 골라주세요!",
+                fontSize = MaterialTheme.typography.titleLarge.fontSize
+            )
+            Spacer(Modifier.height(8.dp))
+            CheckBoxGroup(checkedList, onClickCheck, stringArray)
+        }
     }
 }

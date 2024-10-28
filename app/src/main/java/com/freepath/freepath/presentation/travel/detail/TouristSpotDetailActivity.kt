@@ -3,7 +3,6 @@ package com.freepath.freepath.presentation.travel.detail
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -52,7 +52,6 @@ import com.naver.maps.map.compose.rememberMarkerState
 class TouristSpotDetailActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
             FreePathTheme {
                 val touristSpotDetailViewModel = viewModel<TouristSpotDetailViewModel>()
@@ -196,7 +195,7 @@ fun TouristSpotDetailMap(placeName: String, lat: Double, lng: Double) {
         this.position = CameraPosition(position, 15.0)
     }
     NaverMap(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().requiredHeight(400.dp),
         onMapClick = { _, _ -> { } },
         content = {
             Marker(

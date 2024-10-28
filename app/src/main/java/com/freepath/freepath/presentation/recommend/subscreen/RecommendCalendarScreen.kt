@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -24,10 +26,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,29 +62,49 @@ fun RecommendCalendarScreen(
     viewModel: RecommendViewModel = hiltViewModel(),
     onClickNext: () -> Unit = {},
 ) {
+    val firstDay by remember { viewModel.firstDay }
+    val lastDay by remember { viewModel.secondDay }
     RecommendCalendarScreen(
+        firstDay = firstDay,
+        lastDay = lastDay,
         onClickNext = onClickNext,
         onClickBack = onClickBack,
+        changeDays = viewModel::updateDays,
         modifier = modifier
     )
 }
 
 @Composable
-fun RecommendCalendarScreen(
+private fun RecommendCalendarScreen(
+    firstDay: CalendarDay?,
+    lastDay: CalendarDay?,
     onClickBack: () -> Unit,
     onClickNext: () -> Unit,
+    changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val dayRange = firstDay..lastDay
     RecommendFrame(
         onClickBack = onClickBack,
-        onClickNext = onClickNext
+        onClickNext = onClickNext,
+        isEnabledNextButton = (dayRange?.diffDay() ?: 1000) in 1..2,
     ) {
-        CalendarLibrary(modifier)
+        Text(
+            "❗ 여행 일정은 2~3일만 선택 가능합니다.",
+            Modifier.fillMaxWidth(),
+            fontSize = MaterialTheme.typography.bodyLarge.fontSize,
+            textAlign = TextAlign.Center
+        )
+        Spacer(Modifier.height(8.dp))
+        CalendarLibrary(firstDay, lastDay, changeDays, modifier)
     }
 }
 
 @Composable
 fun CalendarLibrary(
+    firstDay: CalendarDay?,
+    lastDay: CalendarDay?,
+    changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -92,9 +112,7 @@ fun CalendarLibrary(
     val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
     val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
     val daysOfWeek = remember { daysOfWeek() }
-    var clickedFirst by remember { mutableStateOf<CalendarDay?>(null) }
-    var clickedSecond by remember { mutableStateOf<CalendarDay?>(null) }
-    val clickedRange = remember(clickedFirst, clickedSecond) { clickedFirst..clickedSecond }
+    val clickedRange = remember(firstDay, lastDay) { firstDay..lastDay }
 
     val state = rememberCalendarState(
         startMonth = startMonth,
@@ -112,15 +130,12 @@ fun CalendarLibrary(
             dayContent = { day ->
                 Day(day, clickedRange = clickedRange) {
                     when {
-                        clickedFirst == null && clickedSecond == it -> clickedSecond = null
-                        clickedFirst == null -> clickedFirst = it
-                        clickedFirst == it -> clickedFirst = null
-                        clickedSecond == null -> clickedSecond = it
-                        clickedSecond == it -> clickedSecond = null
-                        else -> {
-                            clickedFirst = it
-                            clickedSecond = null
-                        }
+                        firstDay == null && lastDay == it -> changeDays(null, null)
+                        firstDay == null -> changeDays(it, lastDay)
+                        firstDay == it -> changeDays(null, lastDay)
+                        lastDay == null -> changeDays(firstDay, it)
+                        lastDay == it -> changeDays(firstDay, null)
+                        else -> changeDays(it, null)
                     }
                 }
             },
@@ -159,11 +174,11 @@ fun CalendarLibrary(
 @Preview(showBackground = true)
 @Composable
 private fun PreviewCalendarLibrary() {
-    CalendarLibrary(Modifier.padding(16.dp))
+    CalendarLibrary(null, null, { _, _ -> }, Modifier.padding(16.dp))
 }
 
 @Composable
-fun Day(
+private fun Day(
     day: CalendarDay,
     modifier: Modifier = Modifier,
     clickedRange: CalendarDayRange? = null,
@@ -186,12 +201,12 @@ fun Day(
                 interactionSource = remember { MutableInteractionSource() }) { onClick(day) }
             .aspectRatio(1f)
             .thenIf(clickedRange != null && day in clickedRange) {
-                if (day == clickedRange!!.first || day == clickedRange.last) {
+                if (day.date == clickedRange!!.first.date || day.date == clickedRange.last.date) {
                     Modifier
                         .padding(vertical = 4.dp)
                         .background(
                             colorScheme.surfaceContainerHigh,
-                            if (day == clickedRange.first) {
+                            if (day.date == clickedRange.first.date) {
                                 RoundedCornerShape(topStartPercent = 30, bottomStartPercent = 30)
                             } else {
                                 RoundedCornerShape(topEndPercent = 30, bottomEndPercent = 30)
@@ -223,7 +238,7 @@ private fun PreviewDay() {
 }
 
 @Composable
-fun DaysOfWeekTitle(
+private fun DaysOfWeekTitle(
     month: CalendarMonth,
     daysOfWeek: List<DayOfWeek>,
     onClickBackButton: () -> Unit,
@@ -293,7 +308,7 @@ fun SelectedDays(
     selectedRange: CalendarDayRange?,
     modifier: Modifier = Modifier,
 ) {
-    if (selectedRange == null) return
+    if (selectedRange == null || selectedRange.diffDay() == 1L) return
     val first = selectedRange.first.date
     val last = selectedRange.last.date
     val diffDay = selectedRange.diffDay()
@@ -338,7 +353,7 @@ private fun PreviewSelectedDates() {
     )
 }
 
-operator fun CalendarDay.compareTo(other: CalendarDay): Int {
+private operator fun CalendarDay.compareTo(other: CalendarDay): Int {
     return date.compareTo(other.date)
 }
 

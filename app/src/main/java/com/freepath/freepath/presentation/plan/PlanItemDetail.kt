@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -48,6 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.BrushPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -57,11 +59,11 @@ import com.freepath.freepath.presentation.common.TextShort
 import com.freepath.freepath.presentation.model.PlanDate
 import com.freepath.freepath.presentation.model.PlanDetail
 import com.freepath.freepath.presentation.model.planDetailEx
-import com.freepath.freepath.ui.theme.FreePathTheme
-import com.freepath.freepath.ui.theme.Green60
 import com.freepath.freepath.presentation.util.first
 import com.freepath.freepath.presentation.util.getName
 import com.freepath.freepath.presentation.util.last
+import com.freepath.freepath.ui.theme.FreePathTheme
+import com.freepath.freepath.ui.theme.Green60
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
@@ -107,31 +109,40 @@ fun PlanColumn(
 
     Column(modifier = modifier) {
         HorizontalDivider()
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            DateTabRow(selectedTabIndex, dates, Modifier.weight(1f, true)) { rowIndex ->
-                selectedTabIndex = rowIndex
-                coroutineScope.launch {
-                    listState.animateScrollToItem(sumCounts[rowIndex.coerceIn(0 until sumCounts.last())])
+        if (planDates.isEmpty()) {
+            Text(
+                "데이터가 없습니다.",
+                Modifier.fillMaxSize(),
+                fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                textAlign = TextAlign.Center
+            )
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                DateTabRow(selectedTabIndex, dates, Modifier.weight(1f, true)) { rowIndex ->
+                    selectedTabIndex = rowIndex
+                    coroutineScope.launch {
+                        listState.animateScrollToItem(sumCounts[rowIndex.coerceIn(0 until sumCounts.last())])
+                    }
+                }
+                Button(
+                    onClick = onClickChangePlan,
+                    modifier = Modifier
+                        .weight(0.3f, false)
+                        .padding(horizontal = 4.dp)
+                ) {
+                    Text("편집")
                 }
             }
-            Button(
-                onClick = onClickChangePlan,
-                modifier = Modifier
-                    .weight(0.3f, false)
-                    .padding(horizontal = 4.dp)
-            ) {
-                Text("편집")
-            }
+            HorizontalDivider()
+            PlanItems(
+                onClickItem = onClickPlanDetail,
+                planDates = planDates,
+                listState = listState
+            )
         }
-        HorizontalDivider()
-        PlanItems(
-            onClickItem = onClickPlanDetail,
-            planDates = planDates,
-            listState = listState
-        )
     }
 }
 
