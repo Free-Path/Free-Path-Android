@@ -10,6 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.freepath.freepath.presentation.common.navigateToSpotDetailActivity
 import com.freepath.freepath.presentation.planchange.PlanChangeScreen
 import kotlinx.serialization.Serializable
 
@@ -32,14 +33,14 @@ fun PlanNav(
             PlanScreen(
                 planId = id,
                 modifier = modifier,
-                onClickPlanItem = {
-                    // TODO: 관광지 정보 화면 이동
+                onClickPlanItem = { detail ->
+                    navigateToSpotDetailActivity(navController.context, detail.id)
                 },
                 onClickChangePlan = {
                     navController.navigate(PlanNavItem.Change)
                 },
                 onClickBack = {
-                    if(navController.popBackStack().not()) {
+                    if (navController.popBackStack().not()) {
                         (context as Activity).finish()
                     }
                 },
