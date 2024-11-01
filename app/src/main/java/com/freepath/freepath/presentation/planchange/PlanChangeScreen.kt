@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.freepath.freepath.R
 import com.freepath.freepath.presentation.common.FirstTimeLaunchEffect
+import com.freepath.freepath.presentation.common.PrepareAlert
 import com.freepath.freepath.presentation.common.showToast
 import com.freepath.freepath.presentation.model.PlanDetail
 import com.freepath.freepath.presentation.model.planDetailEx
@@ -55,6 +56,7 @@ fun PlanChangeScreen(
     onClickCancel: () -> Unit,
     onClickComplete: () -> Unit,
 ) {
+    var showAlert by rememberSaveable { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     FirstTimeLaunchEffect(Unit) {
@@ -69,11 +71,9 @@ fun PlanChangeScreen(
     PlanChangeScreen(
         dates = plan?.dates ?: emptyList(),
         planDetailsList = planDetailsList ?: emptyList(),
-        modifier = modifier,
-        onClickAdd = { index ->
-            plan?.let { castedPlan ->
-                viewModel.addPlanDetail(index, castedPlan.planDates.first().planDetails.first())
-            }
+        modifier = modifier.padding(horizontal = 4.dp),
+        onClickAdd = { _ ->
+            showAlert = true
         },
         onClickComplete = {
             coroutineScope.launch {
@@ -88,6 +88,7 @@ fun PlanChangeScreen(
             onClickCancel()
         }
     )
+    PrepareAlert(showAlert) { showAlert = false }
 }
 
 @Composable
@@ -108,7 +109,7 @@ private fun PlanChangeScreen(
         )
     } else {
         Column(modifier.fillMaxWidth()) {
-            TopMenu(onClickCancel, onClickComplete)
+            TopMenu(onClickCancel, onClickComplete, Modifier.padding(horizontal = 8.dp))
             LazyColumn {
                 itemsIndexed(planDetailsList) { index, planDetails ->
                     if (index != 0) {
