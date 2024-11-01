@@ -31,11 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.freepath.freepath.R
-import com.freepath.freepath.presentation.common.navigateToActivity
+import com.freepath.freepath.presentation.common.navigateToPlanActivity
 import com.freepath.freepath.presentation.model.CurrentTravel
 import com.freepath.freepath.presentation.model.PreviousTravel
 import com.freepath.freepath.presentation.model.UpcomingTravel
-import com.freepath.freepath.presentation.plan.PlanActivity
 import com.freepath.freepath.ui.theme.Pretendard14
 import com.freepath.freepath.ui.theme.Pretendard16
 import com.freepath.freepath.ui.theme.Pretendard18
@@ -134,9 +133,7 @@ fun CurrentTravelCard(currentTravel: CurrentTravel) {
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                navigateToActivity(context, PlanActivity::class.java) {
-                    putExtra(PlanActivity.PLAN_ID, 10)
-                }
+                navigateToPlanActivity(context, 10)
             },
         shape = RoundedCornerShape(15.dp)
     ) {

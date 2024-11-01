@@ -107,7 +107,7 @@ fun PlanColumn(
         } - 1
     }
 
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(horizontal = 4.dp)) {
         HorizontalDivider()
         if (planDates.isEmpty()) {
             Text(
@@ -200,7 +200,7 @@ fun PlanItems(
     onClickItem: (PlanDetail) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
+        modifier = modifier.padding(start = 8.dp, end = 8.dp, bottom = 8.dp),
         state = listState,
     ) {
         planDates.forEachIndexed { index, plans ->
@@ -209,7 +209,7 @@ fun PlanItems(
                     if (index != 0) {
                         HorizontalDivider()
                     }
-                    Text("${index + 1}일차", Modifier.padding(vertical = 8.dp), fontSize = 20.sp)
+                    Text("${index + 1}일차", Modifier.padding(vertical = 8.dp).width(IntrinsicSize.Max), fontSize = 20.sp)
                 }
             }
             items(plans.planDetails, key = PlanDetail::id) { plan ->
@@ -276,8 +276,9 @@ fun PlanItemDetail(
             TextShort(text = "${Char(0x2764)}  ${planDetail.likes}", fontSize = 10.sp)
             planDetail.operating?.run {
                 TextShort(
-                    text = "${start.dayOfWeek.getName()} " +
-                            stringResource(R.string.hour_minute, first.hour, first.minute) +
+                    text =
+//                    "${start.dayOfWeek.getName()} " +
+                    stringResource(R.string.hour_minute, first.hour, first.minute) +
                             " ~ " +
                             stringResource(R.string.hour_minute, last.hour, last.minute),
                     fontSize = 10.sp

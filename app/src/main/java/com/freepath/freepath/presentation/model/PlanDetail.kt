@@ -1,14 +1,16 @@
 package com.freepath.freepath.presentation.model
 
-import java.time.LocalDateTime
+import com.naver.maps.geometry.LatLng
+import java.time.LocalTime
 
 data class PlanDetail(
-    val id:Int,
+    val id: Int,
     val thumbnail: String,
     val title: String,
     val likes: Int,
     val category: String,
-    val operating: ClosedRange<LocalDateTime>? = null,
+    val latLng: LatLng = LatLng.INVALID,
+    val operating: ClosedRange<LocalTime>? = null,
     val price: Int? = null,
 )
 
@@ -18,6 +20,7 @@ val planDetailEx = PlanDetail(
     title = "경복궁",
     likes = 1768,
     category = "유적/문화재",
-    operating = LocalDateTime.of(2024, 10, 3, 10, 0)..LocalDateTime.of(2024, 10, 3, 20, 0),
+    operating = LocalTime.of(10, 0)..LocalTime.of(20, 0),
     price = null,
+    latLng = LatLng(37.57207, 126.97917)
 )

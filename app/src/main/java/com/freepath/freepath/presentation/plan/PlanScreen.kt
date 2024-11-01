@@ -4,8 +4,10 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.core.updateTransition
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,12 +16,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardBackspace
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material3.BottomSheetScaffold
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
@@ -50,7 +57,6 @@ import com.naver.maps.map.compose.Marker
 import com.naver.maps.map.compose.MarkerDefaults
 import com.naver.maps.map.compose.NaverMap
 import com.naver.maps.map.compose.rememberMarkerState
-import com.naver.maps.map.util.MarkerIcons
 import kotlinx.coroutines.launch
 
 @Composable
@@ -71,7 +77,8 @@ fun PlanScreen(
         modifier,
         onClickPlanItem,
         onClickChangePlan,
-        onClickBack = onClickBack
+        onClickBack = onClickBack,
+        onClickDelete = viewModel::deletePlan
     )
 }
 
@@ -83,10 +90,8 @@ private fun PlanScreen(
     onClickPlanItem: (PlanDetail) -> Unit = {},
     onClickChangePlan: () -> Unit = {},
     onClickBack: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
 ) {
-//    val screenHeight = LocalContext.current.resources.displayMetrics.heightPixels
-    val planDates = plan?.planDates ?: emptyList()
-    val context = LocalContext.current
     val sheetState = rememberBottomSheetScaffoldState()
     val coroutineScope = rememberCoroutineScope()
     var isStartReached by remember { mutableStateOf(true) }
@@ -101,7 +106,7 @@ private fun PlanScreen(
             modifier = Modifier,
             scaffoldState = sheetState,
             sheetContent = {
-                if (plan == null || planDates.isEmpty()) {
+                if (plan == null) {
                     Text(
                         "데이터가 없습니다.",
                         modifier = modifier.fillMaxSize(),
@@ -110,7 +115,7 @@ private fun PlanScreen(
                     )
                 } else {
                     PlanColumn(
-                        planDates = planDates,
+                        planDates = plan.planDates,
                         dates = plan.dates,
                         onClickPlanDetail = onClickPlanItem,
                         onClickChangePlan = onClickChangePlan,
@@ -125,15 +130,16 @@ private fun PlanScreen(
             sheetPeekHeight = 120.dp,
             content = { innerPadding ->
                 MapContent(
-                    onMarkerClick = {
-                        context.showToast("Marker Clicked: ${it.latitude}, ${it.longitude}")
+                    onMarkerClick = { detail ->
+                        onClickPlanItem(detail)
                     },
                     onMapClick = {
                         coroutineScope.launch {
                             sheetState.bottomSheetState.partialExpand()
                         }
                     },
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = Modifier.padding(innerPadding),
+                    planDetails = plan?.details ?: emptyList()
                 )
             },
             sheetSwipeEnabled = false,
@@ -150,8 +156,40 @@ private fun PlanScreen(
                 }
             }
         )
-        IconButton(onClickBack) {
+        PlanTopBar(onClickBack, onClickDelete)
+    }
+}
+
+@Composable
+fun PlanTopBar(
+    onClickBack: () -> Unit = {},
+    onClickDelete: () -> Unit = {},
+    modifier: Modifier = Modifier,
+) {
+    var expanded by remember { mutableStateOf(false) }
+    Row(
+        modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        IconButton(onClickBack, colors = IconButtonDefaults.filledTonalIconButtonColors()) {
             Icon(Icons.AutoMirrored.Filled.KeyboardBackspace, "뒤로가기")
+        }
+        Box {
+            IconButton(
+                { expanded = true },
+                colors = IconButtonDefaults.filledTonalIconButtonColors()
+            ) {
+                Icon(Icons.Rounded.Menu, "뒤로가기")
+            }
+            DropdownMenu(expanded, { expanded = false }) {
+                DropdownMenuItem(
+                    { Text("계획 삭제") },
+                    onClick = onClickDelete,
+                    leadingIcon = { Icon(Icons.Rounded.Delete, "제거", tint = MaterialTheme.colorScheme.error) }
+                )
+            }
         }
     }
 }
@@ -193,13 +231,19 @@ private fun BottomSheetDragHandler(
 @Composable
 private fun MapContent(
     modifier: Modifier = Modifier,
-    onMarkerClick: (LatLng) -> Unit = {},
+    planDetails: List<PlanDetail>,
+    onMarkerClick: (PlanDetail) -> Unit = {},
     onMapClick: () -> Unit = {},
 ) {
     val context = LocalContext.current
-    val positions = remember { listOf(LatLng(37.57207, 126.97917)) }
+    val positions by remember(planDetails) {
+        derivedStateOf {
+            planDetails.map { LatLng(it.latLng.latitude, it.latLng.longitude) }
+        }
+    }
+    val markerStates = positions.map { rememberMarkerState(position = it) }
     NaverMap(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         onSymbolClick = {
             context.showToast(
                 "Symbol Clicked: ${it.caption} at ${it.position.latitude}, ${it.position.longitude}",
@@ -208,24 +252,18 @@ private fun MapContent(
         },
         onMapClick = { _, _ -> onMapClick() },
         content = {
-            var enabled1 by remember { mutableStateOf(true) }
-            Marker(
-                state = rememberMarkerState(
-                    position = positions[0]
-                ),
-                captionText = "Marker1",
-                icon = if (enabled1) {
-                    MarkerDefaults.Icon
-                } else {
-                    MarkerIcons.GRAY
-                },
-                onClick = {
-                    enabled1 = !enabled1
-                    onMarkerClick(positions[0])
-                    true
-                },
-                captionAligns = arrayOf(Align.Top, Align.Right)
-            )
+            for ((index, detail) in planDetails.withIndex()) {
+                Marker(
+                    state = markerStates[index],
+                    captionText = detail.title,
+                    icon = MarkerDefaults.Icon,
+                    onClick = {
+                        onMarkerClick(planDetails[index])
+                        true
+                    },
+                    captionAligns = arrayOf(Align.Top, Align.Right)
+                )
+            }
         },
         uiSettings = MapUiSettings(isZoomControlEnabled = false)
     )

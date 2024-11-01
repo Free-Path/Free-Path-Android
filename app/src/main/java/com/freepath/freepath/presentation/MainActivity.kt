@@ -14,6 +14,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -27,10 +30,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.freepath.freepath.R
-import com.freepath.freepath.presentation.common.navigateToActivity
+import com.freepath.freepath.presentation.common.PrepareAlert
+import com.freepath.freepath.presentation.common.navigateToPlanActivity
 import com.freepath.freepath.presentation.home.HomeScreen
-import com.freepath.freepath.presentation.plan.PlanActivity
-import com.freepath.freepath.presentation.plan.PlanActivity.Companion.PLAN_ID
 import com.freepath.freepath.presentation.recommend.RecommendNav
 import com.freepath.freepath.presentation.travel.TravelScreen
 import com.freepath.freepath.ui.theme.FreePathTheme
@@ -125,7 +127,11 @@ fun NavigationGraph(navController: NavHostController) {
             )
         }
         composable(BottomNavItem.Welfare.screenRoute) {
-            WelfareScreen()
+            var showAlert by remember { mutableStateOf(true) }
+            PrepareAlert(showAlert){
+                navController.popBackStack()
+                showAlert = false
+            }
         }
         composable("recommend") {
             RecommendNav(finishNav = { id ->
@@ -133,9 +139,7 @@ fun NavigationGraph(navController: NavHostController) {
                     popUpTo(BottomNavItem.Travel.screenRoute)
                 }
                 if (id != null) {
-                    navigateToActivity(context, PlanActivity::class.java) {
-                        putExtra(PLAN_ID, id)
-                    }
+                    navigateToPlanActivity(context, 10)
                 }
             })
         }

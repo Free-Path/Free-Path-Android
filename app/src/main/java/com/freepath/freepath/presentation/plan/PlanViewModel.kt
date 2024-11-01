@@ -39,4 +39,10 @@ class PlanViewModel @Inject constructor(
             planIdFlow.emit(planId)
         }
     }
+
+    fun deletePlan() {
+        viewModelScope.launch {
+            // TODO Plan 제거
+        }
+    }
 }
