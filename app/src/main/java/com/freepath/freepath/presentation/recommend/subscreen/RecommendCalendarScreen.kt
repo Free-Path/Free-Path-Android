@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -83,7 +84,7 @@ private fun RecommendCalendarScreen(
     changeDays: (day1: CalendarDay?, day2: CalendarDay?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val dayRange = firstDay..lastDay
+    val dayRange by remember(firstDay, lastDay) { derivedStateOf { firstDay..lastDay } }
     RecommendFrame(
         onClickBack = onClickBack,
         onClickNext = onClickNext,
@@ -109,13 +110,11 @@ fun CalendarLibrary(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val currentMonth = remember { YearMonth.of(2024, 10) }
-    val startMonth = remember { currentMonth.minusMonths(100) } // Adjust as needed
-    val endMonth = remember { currentMonth.plusMonths(100) } // Adjust as needed
+    val endMonth = remember { currentMonth.plusMonths(24) }
     val daysOfWeek = remember { daysOfWeek() }
-    val clickedRange = remember(firstDay, lastDay) { firstDay..lastDay }
+    val clickedRange by remember(firstDay, lastDay) { derivedStateOf { firstDay..lastDay } }
 
     val state = rememberCalendarState(
-        startMonth = startMonth,
         endMonth = endMonth,
         firstVisibleMonth = currentMonth,
         firstDayOfWeek = daysOfWeek.first()
