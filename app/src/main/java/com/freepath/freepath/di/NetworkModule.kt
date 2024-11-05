@@ -50,5 +50,5 @@ class NetworkModule {
 }
 
 //private const val BASE_URL = BuildConfig.FREE_PATH_API_URL
-private const val BASE_URL = "https://url.com"
+private const val BASE_URL = "http://133.186.220.150"
 private const val API_KEY = "API_KEY"
