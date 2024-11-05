@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.freepath.freepath.data.plan.PlanDataSourceRemote
 import com.freepath.freepath.presentation.model.Plan
-import com.freepath.freepath.presentation.model.planEx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -25,7 +24,7 @@ class PlanViewModel @Inject constructor(
         .map { planDataSourceRemote.getPlan(it) }
         .map { result ->
             result.map {
-                planEx
+                it.plan
             }.getOrElse {
                 null
             }
