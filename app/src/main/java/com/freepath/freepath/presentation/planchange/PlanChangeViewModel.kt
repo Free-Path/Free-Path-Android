@@ -3,9 +3,9 @@ package com.freepath.freepath.presentation.planchange
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.freepath.freepath.data.plan.PlanDataSourceRemote
+import com.freepath.freepath.data.plan.PlanResponse
 import com.freepath.freepath.presentation.model.Plan
 import com.freepath.freepath.presentation.model.PlanDetail
-import com.freepath.freepath.presentation.model.planEx
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -33,16 +33,15 @@ class PlanChangeViewModel @Inject constructor(
         if (changed == null) {
             planDataSourceRemote.getPlan(planId)
         } else {
-            Result.success(changed)
+            Result.success(PlanResponse(changed, planId))
         }
     }.map { result ->
         result.map {
-            planEx
+            it.plan
         }.getOrElse {
             null
         }
     }.onEach {
-        println(it)
         if (changedPlan.value == null) {
             changedPlan.value = it
         }
