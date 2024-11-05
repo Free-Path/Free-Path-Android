@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -262,13 +263,12 @@ fun PlanItemDetail(
         AsyncImage(
             model = planDetail.thumbnail,
             modifier = Modifier
-                .width(120.dp)
-                .aspectRatio(1.5f),
+                .size(width = 120.dp, height = 80.dp),
             contentDescription = planDetail.title,
             alignment = Alignment.Center,
-            clipToBounds = false,
+            clipToBounds = true,
+            contentScale = ContentScale.FillBounds,
             placeholder = placeHolder,
-            contentScale = ContentScale.Crop
         )
         Column(Modifier.padding(start = 8.dp)) {
             TextShort(text = planDetail.title)

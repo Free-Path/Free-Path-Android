@@ -139,7 +139,7 @@ fun NavigationGraph(navController: NavHostController) {
                     popUpTo(BottomNavItem.Travel.screenRoute)
                 }
                 if (id != null) {
-                    navigateToPlanActivity(context, 10)
+                    navigateToPlanActivity(context, id)
                 }
             })
         }

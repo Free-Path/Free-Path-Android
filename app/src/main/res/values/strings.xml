@@ -41,16 +41,14 @@
         <item>기타</item>
     </string-array>
     <string-array name="styles">
-        <item>일상적인 환경 및 역할에서의 탈출, 지루함 탈피</item>
-        <item>쉴 수 있는 기회, 육체 피로 해결 및 정신적인 휴식</item>
-        <item>여행 동반자와의 친밀감 및 유대감 증진</item>
-        <item>진정한 자아 찾기 또는 자신을 되돌아볼 기회 찾기</item>
-        <item>SNS 사진 등록 등 과시</item>
-        <item>운동, 건강 증진 및 충전</item>
-        <item>새로운 경험 추구</item>
-        <item>역사 탐방, 문화적 경험 등 교육적 동기</item>
-        <item>특별한 목적(칠순여행, 신혼여행, 수학여행, 인센티브여행)</item>
-        <item>기타</item>
+        <item>자연관광지</item>
+        <item>역사 /유적/종교 시설(문화재, 박물관, 촬영지, 절 등)</item>
+        <item>문화 시설(공연장, 영화관, 전시관 등)</item>
+        <item>상업지구(거리, 시장, 쇼핑시설)</item>
+        <item>레저/스포츠 관련 시설(스키, 카트, 수상레저)</item>
+        <item>테마시설(놀이공원, 워터파크)</item>
+        <item>산책로, 둘레길 등</item>
+        <item>지역 축제/행사</item>
     </string-array>
     <string-array name="themes">
         <item>쇼핑</item>
@@ -76,11 +74,10 @@
         <item>등반 여행</item>
     </string-array>
     <string-array name="destinations">
+        <item>서울</item>
         <item>제주</item>
         <item>광주</item>
         <item>강원</item>
-        <item>서울</item>
-        <item>도서지역</item>
         <item>전북</item>
         <item>대구</item>
         <item>인천</item>
@@ -94,6 +91,7 @@
         <item>충남</item>
         <item>경남</item>
         <item>세종</item>
+        <item>도서지역</item>
     </string-array>
 
     <!-- bottom navigation -->

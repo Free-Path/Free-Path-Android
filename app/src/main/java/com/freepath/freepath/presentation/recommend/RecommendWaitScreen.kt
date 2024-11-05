@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Cancel
 import androidx.compose.material.icons.rounded.Route
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -41,60 +40,20 @@ fun RecommendWaitScreen(
     FirstTimeLaunchEffect {
         viewModel.getRecommendPlan()
     }
-    val isCreationComplete by remember { viewModel.isCreationComplete }
-    RecommendWaitScreen(isCreationComplete, modifier, goPlanScreen)
+    val createdId by remember { viewModel.createdId }
+    RecommendWaitScreen(createdId, modifier, goPlanScreen)
 }
 
 @Composable
 fun RecommendWaitScreen(
-    isCreationComplete: Boolean?,
+    isCreationComplete: Int?,
     modifier: Modifier = Modifier,
     goPlanScreen: (Int?) -> Unit,
 ) {
     val transition = updateTransition(isCreationComplete, label = "selected state")
     transition.AnimatedContent { creationState ->
-        when (creationState) {
-            true -> {
-                Column(
-                    modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Route,
-                        contentDescription = null, // contentDescription 추가
-                        modifier = Modifier
-                            .clip(ShapeDefaults.ExtraLarge)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .clickable { goPlanScreen(10) }
-                            .padding(12.dp)
-                            .size(40.dp)
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        "여행 계획이 만들어졌어요",
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize
-                    )
-                }
-            }
-
-            false -> {
-                Column(
-                    modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        Icons.Rounded.Cancel, "Cancel",
-                        Modifier.size(44.dp)
-                    )
-                    Spacer(Modifier.height(16.dp))
-                    Text(
-                        "여행 계획을 만드는 데 실패 했어요.",
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize
-                    )
-                }
-            }
-
-            null -> {
+        when {
+            creationState == null -> {
                 Column(
                     modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center
@@ -113,6 +72,29 @@ fun RecommendWaitScreen(
                         "Free-Path가\n추천 일정을 만들고 있어요...",
                         fontSize = MaterialTheme.typography.titleLarge.fontSize,
                         textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            creationState >= 0 -> {
+                Column(
+                    modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.Route,
+                        contentDescription = null, // contentDescription 추가
+                        modifier = Modifier
+                            .clip(ShapeDefaults.ExtraLarge)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .clickable { goPlanScreen(creationState) }
+                            .padding(12.dp)
+                            .size(40.dp)
+                    )
+                    Spacer(Modifier.height(16.dp))
+                    Text(
+                        "여행 계획이 만들어졌어요",
+                        fontSize = MaterialTheme.typography.titleLarge.fontSize
                     )
                 }
             }

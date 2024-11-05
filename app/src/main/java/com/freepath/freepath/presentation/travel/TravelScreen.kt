@@ -133,7 +133,7 @@ fun CurrentTravelCard(currentTravel: CurrentTravel) {
             .fillMaxWidth()
             .padding(5.dp)
             .clickable {
-                navigateToPlanActivity(context, 10)
+                navigateToPlanActivity(context, 1)
             },
         shape = RoundedCornerShape(15.dp)
     ) {

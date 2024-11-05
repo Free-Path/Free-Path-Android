@@ -48,7 +48,7 @@ class RecommendViewModel @Inject constructor(
     private val _styleCheckList = mutableStateListOf(*Array(10) { false })
     val styleCheckList: List<Boolean> = _styleCheckList
 
-    var isCreationComplete: MutableState<Boolean?> = mutableStateOf(null)
+    var createdId: MutableState<Int?> = mutableStateOf(null)
         private set
 
     fun updateDays(firstDay: CalendarDay?, secondDay: CalendarDay?) {
@@ -124,13 +124,13 @@ class RecommendViewModel @Inject constructor(
                 Log.d(TAG, "recommend $recommend")
                 planDataSourceRemote.getRecommendedPlan(recommend)
                     .onSuccess {
-                        isCreationComplete.value = true
+                        createdId.value = it
                     }.onFailure {
-                        isCreationComplete.value = false
+                        createdId.value = -1
                     }
             } catch (e: NullPointerException) {
                 e.printStackTrace()
-                isCreationComplete.value = false
+                createdId.value = -1
             }
         }
     }

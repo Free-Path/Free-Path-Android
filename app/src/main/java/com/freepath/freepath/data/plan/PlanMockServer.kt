@@ -2,14 +2,64 @@ package com.freepath.freepath.data.plan
 
 import com.freepath.freepath.presentation.model.Plan
 import com.freepath.freepath.presentation.model.PlanDetail
+import com.naver.maps.geometry.LatLng
 import java.time.LocalDate
+import java.time.LocalTime
 
 object PlanMockServer {
-    private var planResponseList = mutableListOf<PlanResponse>(
+    private var planResponseList = mutableListOf<PlanResponse>()
 
-    )
-
-    private var planDetailList = mutableListOf<PlanDetail>(
+    var planDetailList = mutableListOf<PlanDetail>(
+        PlanDetail(
+            1,
+            "https://i.namu.wiki/i/DK-BcaE6wDCM-N9UJbeQTn0SD9eWgsX9YKWK827rqjbrzDz0-CxW-JFOCiAsUL3CBZ4zE0UDR-p4sLaYPiUjww.webp",
+            "남산 서울타워",
+            6262,
+            "관광 명소",
+            LatLng(37.5511694, 126.9882266)
+        ),
+        PlanDetail(
+            2,
+            "https://lh5.googleusercontent.com/p/AF1QipOkHFi0nvsSgNdR7GA0qAXB70WWAi2ZKhdtLEUU=w408-h408-k-no",
+            "CGV 피카디리1958",
+            1032,
+            "영화관",
+            LatLng(37.5710359, 126.9912291)
+        ),
+        PlanDetail(
+            3,
+            "https://lh5.googleusercontent.com/p/AF1QipP9G6CZUUD7U3z-Km2c2TDsfWk5c3HX0z8d6K3_=w426-h240-k-no",
+            "익선동 한옥마을",
+            2821,
+            "명소",
+            LatLng(37.5737132, 126.9901271)
+        ),
+        PlanDetail(
+            4,
+            "https://lh5.googleusercontent.com/p/AF1QipPDHwqLeDx0fzjZHRTi2erQeKUgW9w_OW6rX80-=w408-h271-k-no",
+            "탑골공원",
+            1678,
+            "공원",
+            LatLng(37.5711455, 126.9883295)
+        ),
+        PlanDetail(
+            5,
+            "https://lh5.googleusercontent.com/p/AF1QipO0QmDh5JU6y1PY31U2X0dY4mpgvZOm1r6zA4Ae=w408-h306-k-no",
+            "청계천",
+            4812,
+            "공원",
+            LatLng(37.5691015, 126.9786692)
+        ),
+        PlanDetail(
+            id = 6,
+            thumbnail = "https://www.kh.or.kr/jnrepo/namo/img/images/000045/20230405103334542_MPZHA77B.jpg",
+            title = "경복궁",
+            likes = 1768,
+            category = "유적/문화재",
+            operating = LocalTime.of(9, 0)..LocalTime.of(17, 30),
+            price = null,
+            latLng = LatLng(37.57207, 126.97917)
+        )
     )
 
     fun getPlan(id: Int): PlanResponse {

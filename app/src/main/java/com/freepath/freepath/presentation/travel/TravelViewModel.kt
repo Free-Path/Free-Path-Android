@@ -12,7 +12,7 @@ class TravelViewModel : ViewModel() {
     val mockCurrentTravel = CurrentTravel(
         currentTravelImg = "https://san.chosun.com/news/photo/201911/13272_55951_153.jpg",
         currentTravelTitle = "제주도",
-        currentTravelPeriod = "2024.12.05~2024.12.09 (3박 4일)",
+        currentTravelPeriod = "2024.11.04~2024.11.07 (3박 4일)",
         currentTravelRoute = listOf(
             "· 1일차: 섭지코지, 성산일출봉",
             "· 2일차: 만장굴, 성읍민속마을",
@@ -24,13 +24,13 @@ class TravelViewModel : ViewModel() {
     val mockUpcomingTravel = listOf<UpcomingTravel>(
         UpcomingTravel(
             upcomingTravelImg = "https://img1.newsis.com/2024/01/30/NISI20240130_0001470501_web.jpg",
-            upcomingTravelDday = "D-35",
+            upcomingTravelDday = "D-39",
             upcomingTravelName = "대전",
             upcomingTravelPeriod = "2024.12.04~2024.12.09 (3박 4일)"
         ),
         UpcomingTravel(
             upcomingTravelImg = "https://files.ban-life.com/content/2022/05/body_1651588720.jpg",
-            upcomingTravelDday = "D-60",
+            upcomingTravelDday = "D-120",
             upcomingTravelName = "포천",
             upcomingTravelPeriod = "2025.03.05~2025.04.10 (4박 5일)"
         ),
@@ -38,7 +38,7 @@ class TravelViewModel : ViewModel() {
             upcomingTravelImg = "https://www.outdoornews.co.kr/news/photo/202201/33017_94277_222.jpg",
             upcomingTravelDday = "D-182",
             upcomingTravelName = "전주",
-            upcomingTravelPeriod = "2025.12.05~2025.12.08 (2박 3일)"
+            upcomingTravelPeriod = "2025.05.06~2025.05.08 (2박 3일)"
         )
     )
 

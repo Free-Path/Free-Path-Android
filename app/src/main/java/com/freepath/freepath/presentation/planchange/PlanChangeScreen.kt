@@ -150,7 +150,7 @@ private fun DayTitle(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            "${day}일차 ${
+            "${day}일차 - ${
                 stringResource(
                     R.string.month_day_str,
                     date.monthValue,
