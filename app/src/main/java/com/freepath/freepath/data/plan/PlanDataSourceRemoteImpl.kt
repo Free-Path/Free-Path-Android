@@ -24,16 +24,24 @@ class PlanDataSourceRemoteImpl @Inject constructor(
     override suspend fun getRecommendedPlan(recommend: Recommend): Result<Int> {
         delay(500)
         val detailList = PlanMockServer.planDetailList
-        val planIdResult = addPlan(Plan(
-            listOf(
-                PlanDate(LocalDate.now().plusDays(3),
-                    listOf(detailList[0], detailList[1])),
-                PlanDate(LocalDate.now().plusDays(4),
-                    listOf(detailList[2], detailList[3])),
-                PlanDate(LocalDate.now().plusDays(5),
-                    listOf(detailList[4])),
+        val planIdResult = addPlan(
+            Plan(
+                listOf(
+                    PlanDate(
+                        LocalDate.now().plusDays(3),
+                        listOf(detailList[0], detailList[1])
+                    ),
+                    PlanDate(
+                        LocalDate.now().plusDays(4),
+                        listOf(detailList[2], detailList[3])
+                    ),
+                    PlanDate(
+                        LocalDate.now().plusDays(5),
+                        listOf(detailList[4], detailList[5])
+                    ),
+                )
             )
-        ))
+        )
         return planIdResult
     }
 
